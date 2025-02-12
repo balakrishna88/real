@@ -1,0 +1,523 @@
+{% load static tailwind_tags %}
+{% tailwind_css %}
+
+<!-- Main Section for Creating Land Property -->
+<section class="w-[95%] mx-auto">
+    <!-- Section Heading -->
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Create Land Property</h2>
+
+    <!-- Form for Land Property Creation -->
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Deal Type and Property Type Row -->
+        <div class="form-group mb-6 flex space-x-4">
+            <!-- Deal Type Dropdown -->
+            <div class="flex-1">
+                <label for="{{ l_form.deal_type.id_for_label }}" class="block text-gray-800 dark:text-white text-lg font-medium">
+                    Deal Type
+                </label>
+                <select 
+                    name="deal_type" 
+                    id="{{ l_form.deal_type.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                >
+                    <option value="">Select deal type</option>
+                    <option value="SELL" {% if l_form.deal_type.value == 'SELL' %}selected{% endif %}>Sell</option>
+                    <option value="BUY" {% if l_form.deal_type.value == 'BUY' %}selected{% endif %}>Buy</option>
+                    <option value="RENT" {% if l_form.deal_type.value == 'RENT' %}selected{% endif %}>Rent</option>
+                </select>
+                <!-- Display Errors for Deal Type -->
+                {% if l_form.deal_type.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.deal_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Property Type Dropdown -->
+            <div class="flex-1">
+                <label for="{{ l_form.property_type.id_for_label }}" class="block text-gray-800 dark:text-white text-lg font-medium">
+                    Property Type
+                </label>
+                <select 
+                    name="property_type" 
+                    id="{{ l_form.property_type.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                >
+                    <option value="">Select property type</option>
+                    <option value="LAND" {% if l_form.property_type.value == 'LAND' %}selected{% endif %}>Land</option>
+                    <option value="PLOT" {% if l_form.property_type.value == 'PLOT' %}selected{% endif %}>Plot</option>
+                    <option value="FARM_LAND" {% if l_form.property_type.value == 'FARM_LAND' %}selected{% endif %}>Farm Land</option>
+                </select>
+                <!-- Display Errors for Property Type -->
+                {% if l_form.property_type.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.property_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <!-- Property Title Input -->
+        <div class="form-group mb-6">
+            <label for="{{ l_form.title.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Property Title</label>
+            <input 
+                type="text" 
+                name="title" 
+                id="{{ l_form.title.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold bg-white dark:bg-gray-800 dark:text-gray-200"
+                placeholder="Enter property title"
+                value="{{ l_form.title.value|default:'' }}" 
+            />
+            <!-- Display Errors for Property Title -->
+            {% if l_form.title.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in l_form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Property Description Textarea -->
+        <div class="form-group mb-6">
+            <label for="{{ l_form.description.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Description</label>
+            <textarea 
+                name="description" 
+                id="{{ l_form.description.id_for_label }}" 
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold bg-white dark:bg-gray-800 dark:text-gray-200"
+                placeholder="Enter property description"
+                rows="4">{{ l_form.description.value|default:'' }}</textarea>
+            <!-- Display Errors for Description -->
+            {% if l_form.description.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in l_form.description.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Contact Information Row -->
+        <div class="form-group mb-6 flex space-x-4">
+            <!-- Contact Phone Input -->
+            <div class="flex-1">
+                <label for="{{ l_form.contact_phone.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Contact Phone</label>
+                <input 
+                    type="text" 
+                    name="contact_phone" 
+                    id="{{ l_form.contact_phone.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold bg-white dark:bg-gray-800 dark:text-gray-200"
+                    placeholder="Enter contact phone number"
+                    value="{{ l_form.contact_phone.value|default:'' }}" 
+                />
+                <!-- Display Errors for Contact Phone -->
+                {% if l_form.contact_phone.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in l_form.contact_phone.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Contact Email Input -->
+            <div class="flex-1">
+                <label for="{{ l_form.contact_email.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Contact Email</label>
+                <input 
+                    type="email" 
+                    name="contact_email" 
+                    id="{{ l_form.contact_email.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold bg-white dark:bg-gray-800 dark:text-gray-200"
+                    placeholder="Enter contact email"
+                    value="{{ l_form.contact_email.value|default:'' }}" 
+                />
+                <!-- Display Errors for Contact Email -->
+                {% if l_form.contact_email.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in l_form.contact_email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <!-- Address Information Section -->
+        <div class="location-container bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-all">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Address Information</h2>
+
+            <!-- Location Input -->
+            <div class="form-group mb-6">
+                <label for="{{ l_form.location.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Geo Location</label>
+                <input 
+                    type="text" 
+                    name="location" 
+                    id="{{ l_form.location.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                    placeholder="Enter location"
+                    value="{{ l_form.location.value|default:'' }}" 
+                />
+            </div>
+
+            <!-- Village and Subdivision Row -->
+            <div class="form-group mb-6 flex space-x-6">
+                <!-- Village Input -->
+                <div class="w-1/2">
+                    <label for="{{ l_form.village.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Village</label>
+                    <input 
+                        type="text" 
+                        name="village" 
+                        id="{{ l_form.village.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter village"
+                        value="{{ l_form.village.value|default:'' }}" 
+                    />
+                </div>
+
+                <!-- Subdivision Input -->
+                <div class="w-1/2">
+                    <label for="{{ l_form.subdivision.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Subdivision</label>
+                    <input 
+                        type="text" 
+                        name="subdivision" 
+                        id="{{ l_form.subdivision.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter subdivision"
+                        value="{{ l_form.subdivision.value|default:'' }}" 
+                    />
+                </div>
+            </div>
+
+            <!-- District, State, and Pincode Row -->
+            <div class="form-group mb-6 flex space-x-6">
+                <!-- District Input -->
+                <div class="w-1/3">
+                    <label for="{{ l_form.district.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">District</label>
+                    <input 
+                        type="text" 
+                        name="district" 
+                        id="{{ l_form.district.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter district"
+                        value="{{ l_form.district.value|default:'' }}" 
+                    />
+                </div>
+
+                <!-- State Input -->
+                <div class="w-1/3">
+                    <label for="{{ l_form.state.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">State</label>
+                    <input 
+                        type="text" 
+                        name="state" 
+                        id="{{ l_form.state.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter state"
+                        value="{{ l_form.state.value |default:''}}" 
+                    />
+                </div>
+
+                <!-- Pincode Input -->
+                <div class="w-1/3">
+                    <label for="{{ l_form.pincode.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Pincode</label>
+                    <input 
+                        type="text" 
+                        name="pincode" 
+                        id="{{ l_form.pincode.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter pincode"
+                        value="{{ l_form.pincode.value|default:'' }}" 
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- Area, Unit, and Price Row -->
+        <div class="form-group mb-6 flex items-center space-x-4">
+            <!-- Total Area Input -->
+            <div class="flex-1">
+                <label for="{{ l_form.total_area.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Total Area</label>
+                <input 
+                    type="number" 
+                    name="total_area" 
+                    id="{{ l_form.total_area.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200"
+                    placeholder="Enter total area"
+                    value="{{ l_form.total_area.value }}" 
+                />
+                <!-- Display Errors for Total Area -->
+                {% if l_form.total_area.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.total_area.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Area Unit Dropdown -->
+            <div class="flex-none w-46">
+                <label for="{{ l_form.area_unit.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Area Unit</label>
+                <select 
+                    name="area_unit" 
+                    id="{{ l_form.area_unit.id_for_label }}"
+                    class="mt-2 p-3 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200"
+                >
+                    <option value="">Select area unit</option>
+                    <option value="SQFT" {% if l_form.area_unit.value == 'SQFT' %}selected{% endif %}>Square Feet</option>
+                    <option value="ACRES" {% if l_form.area_unit.value == 'ACRES' %}selected{% endif %}>Acres</option>
+                    <option value="HECTARES" {% if l_form.area_unit.value == 'HECTARES' %}selected{% endif %}>Hectares</option>
+                    <option value="SQM" {% if l_form.area_unit.value == 'SQM' %}selected{% endif %}>Square Meters</option>
+                </select>
+                <!-- Display Errors for Area Unit -->
+                {% if l_form.area_unit.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.area_unit.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Price Input -->
+            <div class="flex-1">
+                <label for="{{ l_form.price.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Price</label>
+                <input 
+                    type="number" 
+                    name="price" 
+                    id="{{ l_form.price.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200"
+                    placeholder="Enter price"
+                    value="{{ l_form.price.value }}" 
+                />
+                <!-- Display Errors for Price -->
+                {% if l_form.price.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.price.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+
+        
+        <!-- Nearby Amenities Input -->
+        <div class="form-group mb-6">
+            <label for="{{ l_form.nearby_amenities.id_for_label }}" class="block text-lg font-medium text-gray-900 dark:text-gray-200">Nearby Amenities</label>
+            <input 
+                type="text" 
+                name="nearby_amenities" 
+                id="{{ l_form.nearby_amenities.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 rounded-lg focus:outline-none focus:ring-2 text-lg font-semibold 
+                border-indigo-300 dark:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-400 
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                placeholder="Enter nearby amenities"
+                value="{{ l_form.nearby_amenities.value|default:'' }}" 
+            />
+            {% if l_form.nearby_amenities.errors %}
+                <div class="text-red-500 text-sm mt-2 dark:text-red-400">
+                    {% for error in l_form.nearby_amenities.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Nearby Input -->
+        <div class="form-group mb-6">
+            <label for="{{ l_form.nearby.id_for_label }}" class="block text-lg font-medium text-gray-900 dark:text-gray-200">Nearby</label>
+            <input 
+                type="text" 
+                name="nearby" 
+                id="{{ l_form.nearby.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 rounded-lg focus:outline-none focus:ring-2 text-lg font-semibold 
+                border-indigo-300 dark:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-400 
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                placeholder="Enter nearby locations"
+                value="{{ l_form.nearby.value|default:'' }}" 
+            />
+            {% if l_form.nearby.errors %}
+                <div class="text-red-500 text-sm mt-2 dark:text-red-400">
+                    {% for error in l_form.nearby.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Distance from Road Input -->
+        <div class="form-group mb-6">
+            <label for="{{ l_form.distance_from_road.id_for_label }}" class="block text-lg font-medium text-gray-900 dark:text-gray-200">Distance from Road</label>
+            <input 
+                type="text" 
+                name="distance_from_road" 
+                id="{{ l_form.distance_from_road.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 rounded-lg focus:outline-none focus:ring-2 text-lg font-semibold 
+                border-indigo-300 dark:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-400 
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                placeholder="Enter distance from road"
+                value="{{ l_form.distance_from_road.value|default:'' }}" 
+            />
+            {% if l_form.distance_from_road.errors %}
+                <div class="text-red-500 text-sm mt-2 dark:text-red-400">
+                    {% for error in l_form.distance_from_road.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+
+
+
+
+
+        <!-- Checkbox Section - 3 Columns on Larger Screens -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-white dark:bg-gray-800 transition-all mt-2 p-4 w-full border-2 rounded-lg focus:outline-none focus:ring-2 text-lg font-semibold 
+        border-indigo-300 dark:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-400 
+        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+            <!-- Has Water Checkbox -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <input 
+                    type="checkbox" 
+                    name="has_water" 
+                    id="{{ l_form.has_water.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 border-2 border-indigo-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500"
+                    {% if l_form.has_water.value %}checked{% endif %}
+                />
+                <label for="{{ l_form.has_water.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Has Water</label>
+            </div>
+
+            <!-- Has Electricity -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <input 
+                    type="checkbox" 
+                    name="has_electricity" 
+                    id="{{ l_form.has_electricity.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 border-2 border-indigo-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500"
+                    {% if l_form.has_electricity.value %}checked{% endif %}
+                />
+                <label for="{{ l_form.has_electricity.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Has Electricity</label>
+            </div>
+
+            <!-- Is Published -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <input 
+                    type="checkbox" 
+                    name="is_published" 
+                    id="{{ l_form.is_published.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 border-2 border-indigo-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500"
+                    {% if l_form.is_published.value %}checked{% endif %}
+                />
+                <label for="{{ l_form.is_published.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Is Published?</label>
+            </div>
+
+            <!-- Is Corner Plot -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <input 
+                    type="checkbox" 
+                    name="is_corner_plot" 
+                    id="{{ l_form.is_corner_plot.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 border-2 border-indigo-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500"
+                    {% if l_form.is_corner_plot.value %}checked{% endif %}
+                />
+                <label for="{{ l_form.is_corner_plot.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Is Corner Plot</label>
+            </div>
+
+            <!-- Irrigation Facilities -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <input 
+                    type="checkbox" 
+                    name="irrigation_facilities" 
+                    id="{{ l_form.irrigation_facilities.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 border-2 border-indigo-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500"
+                    {% if l_form.irrigation_facilities.value %}checked{% endif %}
+                />
+                <label for="{{ l_form.irrigation_facilities.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Irrigation Facilities</label>
+            </div>
+        </div>
+
+        
+
+        <!-- Soil Type and Facing in the same row -->
+        <div class="form-group mb-6 flex items-center space-x-4">
+            <!-- Soil Type -->
+            <div class="flex-1">
+                <label for="{{ l_form.soil_type.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Soil Type</label>
+                <select 
+                    name="soil_type" 
+                    id="{{ l_form.soil_type.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold bg-white dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                >
+                    <option value="">Select soil type</option>
+                    <option value="loamy" {% if l_form.soil_type.value == 'loamy' %}selected{% endif %}>Loamy</option>
+                    <option value="clay" {% if l_form.soil_type.value == 'clay' %}selected{% endif %}>Clay</option>
+                    <option value="sandy" {% if l_form.soil_type.value == 'sandy' %}selected{% endif %}>Sandy</option>
+                    <option value="saline" {% if l_form.soil_type.value == 'saline' %}selected{% endif %}>Saline</option>
+                </select>
+                {% if l_form.soil_type.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.soil_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Facing -->
+            <div class="flex-1">
+                <label for="{{ l_form.facing.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Facing</label>
+                <select 
+                    name="facing" 
+                    id="{{ l_form.facing.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold bg-white dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                >
+                    <option value="">Select facing direction</option>
+                    <option value="NORTH" {% if l_form.facing.value == 'NORTH' %}selected{% endif %}>North</option>
+                    <option value="SOUTH" {% if l_form.facing.value == 'SOUTH' %}selected{% endif %}>South</option>
+                    <option value="EAST" {% if l_form.facing.value == 'EAST' %}selected{% endif %}>East</option>
+                    <option value="WEST" {% if l_form.facing.value == 'WEST' %}selected{% endif %}>West</option>
+                    <option value="NORTH_EAST" {% if l_form.facing.value == 'NORTH_EAST' %}selected{% endif %}>North-East</option>
+                    <option value="NORTH_WEST" {% if l_form.facing.value == 'NORTH_WEST' %}selected{% endif %}>North-West</option>
+                    <option value="SOUTH_EAST" {% if l_form.facing.value == 'SOUTH_EAST' %}selected{% endif %}>South-East</option>
+                    <option value="SOUTH_WEST" {% if l_form.facing.value == 'SOUTH_WEST' %}selected{% endif %}>South-West</option>
+                </select>
+                {% if l_form.facing.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in l_form.facing.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Upload Images -->
+        <div class="form-group">
+            <label for="id_images" class="block text-gray-700 dark:text-gray-300">Upload Images</label>
+            <input type="file" name="images" id="id_images" multiple 
+                class="mt-2 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-white">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" name="land_property_form" 
+                class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
+                Submit Land Property
+            </button>
+        </div>
+
+    </form>
+</section>

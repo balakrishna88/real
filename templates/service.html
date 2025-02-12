@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Services{% endblock %}
+
+{% block content %}
+<section class="m-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Agents Card -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+            <h3 class="text-lg font-semibold text-indigo-600">Agents</h3>
+            <p class="text-gray-600 mt-2">Find trusted real estate agents for your needs.</p>
+            <a href="#" class="mt-4 inline-block text-indigo-500 font-semibold">Learn More →</a>
+        </div>
+    
+        <!-- Surveyors Card -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+            <h3 class="text-lg font-semibold text-green-600">Surveyors</h3>
+            <p class="text-gray-600 mt-2">Professional land and property surveyors available.</p>
+            <a href="#" class="mt-4 inline-block text-green-500 font-semibold">Learn More →</a>
+        </div>
+    
+        <!-- Legal Support Card -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+            <h3 class="text-lg font-semibold text-red-600">Legal Support</h3>
+            <p class="text-gray-600 mt-2">Expert legal guidance for real estate transactions.</p>
+            <a href="#" class="mt-4 inline-block text-red-500 font-semibold">Learn More →</a>
+        </div>
+    
+        <!-- Other Services Card -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+            <h3 class="text-lg font-semibold text-blue-600">Other Services</h3>
+            <p class="text-gray-600 mt-2">Explore additional services tailored to your needs.</p>
+            <a href="#" class="mt-4 inline-block text-blue-500 font-semibold">Learn More →</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

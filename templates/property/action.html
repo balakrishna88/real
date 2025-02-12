@@ -1,0 +1,248 @@
+<section class="m-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- Request Mobile -->
+    {% if messages %}
+    <div class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Modal: Request Mobile Number -->
+    <div id="requestModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-lg font-semibold dark:text-white mb-4">Request Mobile Number</h2>
+            <form method="POST" action="{% url 'request_mobile' %}" class="space-y-4">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                
+                <!-- Message Field -->
+                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message:</label>
+                <textarea name="message" id="message" rows="3"
+                          class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">I would like to request your mobile number.
+                </textarea>
+                
+                <!-- Phone Number Field -->
+                <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Phone Number:</label>
+                <input type="text" id="phone_number" name="phone_number"
+                       value="{{ request.user.phone_number|default_if_none:'' }}"
+                       class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                    Send Request
+                </button>
+            </form>
+            
+            <!-- Close Button -->
+            <button onclick="document.getElementById('requestModal').classList.add('hidden')"
+                class="mt-4 w-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white py-2 px-4 rounded-md">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Open Modal Button -->
+    <button onclick="document.getElementById('requestModal').classList.remove('hidden')"
+        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+        Request Mobile
+    </button>
+
+    <!-- Message & Chat -->
+    {% if request.user == property.user %}
+    <a href="{% url 'room_list' %}">
+        <button class="w-full md:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M18 10c0 1.38-.56 2.63-1.46 3.54C15.63 14.44 14.38 15 13 15h-2v3l-4-3H7c-1.38 0-2.63-.56-3.54-1.46C2.56 12.63 2 11.38 2 10c0-4.42 3.58-8 8-8s8 3.58 8 8z"></path>
+            </svg>
+            <span>Go to Chat Rooms</span>
+        </button>
+    </a>
+    {% else %}
+    <a href="{% url 'chat_with_author' author.id %}">
+        <button class="w-full md:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M18 10c0 1.38-.56 2.63-1.46 3.54C15.63 14.44 14.38 15 13 15h-2v3l-4-3H7c-1.38 0-2.63-.56-3.54-1.46C2.56 12.63 2 11.38 2 10c0-4.42 3.58-8 8-8s8 3.58 8 8z"></path>
+            </svg>
+            <span>Message & Chat</span>
+        </button>
+    </a>
+    {% endif %}
+
+
+    <!-- Like/Unlike Button -->
+    {% if is_like %}
+        <form method="POST" action="{% url 'property-unlike' property_id=property.id %}">
+            {% csrf_token %}
+            <button type="submit" 
+                class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                👎 Unlike
+            </button>
+        </form>
+    {% else %}
+        <form method="POST" action="{% url 'property-like' property_id=property.id %}">
+            {% csrf_token %}
+            <button type="submit" 
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                👍 Like
+            </button>
+        </form>
+    {% endif %}
+
+    <!-- Favourite Button -->
+    {% if user.is_authenticated %}
+        {% if is_favorite %}
+            <form method="post" action="{% url 'remove_favourite' property_id=property.id %}">
+                {% csrf_token %}
+                <button type="submit" class="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 17l-1.35-1.17C4.5 12.17 2 9.5 2 6.5 2 4 4 2 6.5 2c1.54 0 3.04.81 3.91 2.09C11.96 2.81 13.46 2 15 2 17.5 2 19.5 4 19.5 6.5c0 3-2.5 5.67-6.65 9.33L10 17z"></path>
+                    </svg>
+                    <span>Remove from Favourites</span>
+                </button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'add_favourite' property_id=property.id %}">
+                {% csrf_token %}
+                <button type="submit" class="w-full md:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 17l-1.35-1.17C4.5 12.17 2 9.5 2 6.5 2 4 4 2 6.5 2c1.54 0 3.04.81 3.91 2.09C11.96 2.81 13.46 2 15 2 17.5 2 19.5 4 19.5 6.5c0 3-2.5 5.67-6.65 9.33L10 17z"></path>
+                    </svg>
+                    <span>Add to Favourites</span>
+                </button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p class="text-gray-700 dark:text-gray-300">
+            You must <a href="{% url 'login' %}" class="text-blue-500 dark:text-blue-400 underline">log in</a> to add this property to your favourites.
+        </p>
+    {% endif %}
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-lg font-semibold dark:text-white mb-4">Report This Property</h2>
+            <form method="POST" action="{% url 'property-report' property_id=property.id %}" class="space-y-4">
+                {% csrf_token %}
+                <input type="hidden" name="property_id" value="{{ property.id }}">
+                
+                <!-- Report Type Dropdown -->
+                <label for="report_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Report Type:
+                </label>
+                <select name="report_type" id="report_type"
+                    class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                    <option value="spam">Spam</option>
+                    <option value="expired">Expired</option>
+                    <option value="no_response">No Response</option>
+                    <option value="other">Other</option>
+                </select>
+                
+                <!-- Additional Info -->
+                <label for="additional_info" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Additional Information (Optional):
+                </label>
+                <textarea name="additional_info" id="additional_info" rows="3"
+                    class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+                    placeholder="Enter additional details (optional)"></textarea>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">
+                    Submit Report
+                </button>
+            </form>
+            
+            <!-- Close Button -->
+            <button onclick="document.getElementById('reportModal').classList.add('hidden')"
+                class="mt-4 w-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white py-2 px-4 rounded-md">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Open Report Modal Button -->
+    <button onclick="document.getElementById('reportModal').classList.remove('hidden')"
+        class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+        Report
+    </button>
+</section>
+
+<section>
+    <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg p-6 max-w-3xl mx-auto flex justify-between items-center">
+        <!-- Stats Section -->
+        <div class="flex space-x-6">
+            <div class="text-center">
+                <span class="text-lg font-bold text-gray-700 dark:text-white">{{ views_count }}</span>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Views</p>
+            </div>
+            <div class="text-center">
+                <span class="text-lg font-bold text-gray-700 dark:text-white">{{ likes_count }}</span>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Likes</p>
+            </div>
+            <div class="text-center">
+                <span class="text-lg font-bold text-gray-700 dark:text-white">{{ shares_count }}</span>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Shares</p>
+            </div>
+        </div>
+    
+        <!-- Social Share Icons -->
+        <div class="flex space-x-3">
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                class="bg-blue-600 p-2 rounded-full hover:bg-blue-700" target="_blank">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M22 12A10 10 0 1 0 12 22v-7h-2v-3h2V9c0-2 1.3-3 3-3h3v3h-2c-1 0-1 .4-1 1v2h3l-1 3h-2v7A10 10 0 0 0 22 12z"></path>
+                </svg>
+            </a>
+    
+            <!-- Twitter -->
+            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text=Check%20this%20out!"
+                class="bg-gray-800 p-2 rounded-full hover:bg-gray-700" target="_blank">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23 3a10.9 10.9 0 0 1-3 1A5.4 5.4 0 0 0 22 1a10.7 10.7 0 0 1-3.4 1.3 5.3 5.3 0 0 0-9 4.8A15.1 15.1 0 0 1 2 2.5 5.3 5.3 0 0 0 4 10.6a5.2 5.2 0 0 1-2-.5v.1a5.3 5.3 0 0 0 4.2 5.2 5.2 5.2 0 0 1-1.4.2 5 5 0 0 1-1-.1 5.3 5.3 0 0 0 4.9 3.6A10.7 10.7 0 0 1 1 20.6a15 15 0 0 0 8.1 2.4c9.8 0 15-8.2 15-15v-.7A10.7 10.7 0 0 0 23 3z"></path>
+                </svg>
+            </a>
+    
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}"
+                class="bg-blue-800 p-2 rounded-full hover:bg-blue-900" target="_blank">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 3a2 2 0 1 0 0 4 2 2 0 1 0 0-4zM2 8h4v12H2zm6 0h4v1.5a4 4 0 0 1 7 2.5v8h-4v-7a1.5 1.5 0 0 0-3 0v7H8z"></path>
+                </svg>
+            </a>
+    
+            <!-- WhatsApp -->
+            <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}"
+                class="bg-green-600 p-2 rounded-full hover:bg-green-700" target="_blank">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2A10 10 0 0 0 2 12a9.8 9.8 0 0 0 1.5 5.4L2 22l4.8-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.3-1.2l-.3-.2-2.8.7.8-2.7-.2-.4A7.8 7.8 0 1 1 12 20zm4-5c-.2-.1-1.3-.7-1.5-.8s-.3-.1-.4.1c-.2.3-.4.7-.5.8s-.2.2-.5 0a6.4 6.4 0 0 1-3-2.7c-.2-.4 0-.4.3-1s.3-.5 0-.9-1-.9-1.4-1.2-.7-.3-1 0c-.3.1-.7.5-.8.8s-.4.8-.2 1.3c.3 1 .9 1.8 1.8 2.5 1.1.7 2.5 1.1 2.9 1.2.4 0 .7 0 1-.4.3-.5.8-1.2 1-1.4s.4-.3.6-.2c.2 0 1.3.6 1.5.7.2.1.4.2.5.3s.2.3 0 .6-1.3 1.3-1.8 1.7"></path>
+                </svg>
+            </a>
+
+            <!-- Email Share Button -->
+            <a href="mailto:?subject=Check this out!&body=Hey, I found this interesting: {{ request.build_absolute_uri }}"
+            class="bg-red-600 p-2 rounded-full hover:bg-red-700">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 13.1L2 6v12h20V6l-10 7.1zM2 4l10 7 10-7H2z"></path>
+            </svg>
+            </a>
+
+    
+            <!-- Copy Link -->
+            <button onclick="copyLink()" class="bg-gray-600 p-2 rounded-full hover:bg-gray-700">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 10H7a5 5 0 0 0 0 10h4v-2H7a3 3 0 0 1 0-6h2v-2zM8 13h8v2H8v-2zm10-8h-4v2h4a3 3 0 0 1 0 6h-2v2h2a5 5 0 0 0 0-10z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+    }
+    </script>
+    
+    
+</section>

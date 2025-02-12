@@ -1,0 +1,738 @@
+{% load static tailwind_tags %}
+{% tailwind_css %}
+
+<!-- Main Section for Creating Land Property -->
+<section class="w-[95%] mx-auto">
+    <!-- Section Heading -->
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Create Residential Property</h2>
+
+    <!-- Form for Land Property Creation -->
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Deal Type and Property Type Row -->
+        <div class="form-group mb-6 flex space-x-4">
+            <!-- Deal Type Dropdown -->
+            <div class="flex-1">
+                <label for="{{ r_form.deal_type.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">
+                    Deal Type
+                </label>
+                <select 
+                    name="deal_type" 
+                    id="{{ r_form.deal_type.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold"
+                >
+                    <option value="">Select deal type</option>
+                    <option value="SELL" {% if r_form.deal_type.value == 'SELL' %}selected{% endif %}>Sell</option>
+                    <option value="BUY" {% if r_form.deal_type.value == 'BUY' %}selected{% endif %}>Buy</option>
+                    <option value="RENT" {% if r_form.deal_type.value == 'RENT' %}selected{% endif %}>Rent</option>
+                </select>
+                <!-- Display Errors for Deal Type -->
+                {% if r_form.deal_type.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in r_form.deal_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Property Type Dropdown -->
+            <div class="flex-1">
+                <label for="{{ r_form.property_type.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">
+                    Property Type
+                </label>
+                <select 
+                    name="property_type" 
+                    id="{{ r_form.property_type.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold"
+                >
+                    <option value="">Select property type</option>
+                    <option value="LAND" {% if r_form.property_type.value == 'LAND' %}selected{% endif %}>Land</option>
+                    <option value="PLOT" {% if r_form.property_type.value == 'PLOT' %}selected{% endif %}>Plot</option>
+                    <option value="FARM_LAND" {% if r_form.property_type.value == 'FARM_LAND' %}selected{% endif %}>Farm Land</option>
+                    <option value="HOUSE" {% if r_form.property_type.value == 'HOUSE' %}selected{% endif %}>House</option>
+                    <option value="APARTMENT" {% if r_form.property_type.value == 'APARTMENT' %}selected{% endif %}>Apartment</option>
+                    <option value="VILLA" {% if r_form.property_type.value == 'VILLA' %}selected{% endif %}>Villa</option>
+                    <option value="BUNGALOW" {% if r_form.property_type.value == 'BUNGALOW' %}selected{% endif %}>Bungalow</option>
+                    <option value="RESORT_PROPERTY" {% if r_form.property_type.value == 'RESORT_PROPERTY' %}selected{% endif %}>Resort Property</option>
+                    <option value="FARM_HOUSE" {% if r_form.property_type.value == 'FARM_HOUSE' %}selected{% endif %}>Farm House</option>
+                </select>
+                <!-- Display Errors for Property Type -->
+                {% if r_form.property_type.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in r_form.property_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Property Title Input -->
+        <div class="form-group mb-6">
+            <label for="{{ r_form.title.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">
+                Property Title
+            </label>
+            <input 
+                type="text" 
+                name="title" 
+                id="{{ r_form.title.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg bg-white dark:bg-gray-800 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold text-gray-900 dark:text-gray-200"
+                placeholder="Enter property title"
+                value="{{ r_form.title.value|default:'' }}" 
+            />
+            <!-- Display Errors for Property Title -->
+            {% if r_form.title.errors %}
+                <div class="text-red-500 text-sm mt-2">
+                    {% for error in r_form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Property Description Textarea -->
+        <div class="form-group mb-6">
+            <label for="{{ r_form.description.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">
+                Description
+            </label>
+            <textarea 
+                name="description" 
+                id="{{ r_form.description.id_for_label }}" 
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg bg-white dark:bg-gray-800 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold text-gray-900 dark:text-gray-200"
+                placeholder="Enter property description"
+                rows="4">{{ r_form.description.value|default:'' }}</textarea>
+            <!-- Display Errors for Description -->
+            {% if r_form.description.errors %}
+                <div class="text-red-500 text-sm mt-2">
+                    {% for error in r_form.description.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Contact Information Row -->
+        <div class="form-group mb-6 flex space-x-4">
+            <!-- Contact Phone Input -->
+            <div class="flex-1">
+                <label for="{{ r_form.contact_phone.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">
+                    Contact Phone
+                </label>
+                <input 
+                    type="text" 
+                    name="contact_phone" 
+                    id="{{ r_form.contact_phone.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg bg-white dark:bg-gray-800 
+                        focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold text-gray-900 dark:text-gray-200"
+                    placeholder="Enter contact phone number"
+                    value="{{ r_form.contact_phone.value|default:'' }}" 
+                />
+                <!-- Display Errors for Contact Phone -->
+                {% if r_form.contact_phone.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in r_form.contact_phone.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Contact Email Input -->
+            <div class="flex-1">
+                <label for="{{ r_form.contact_email.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">
+                    Contact Email
+                </label>
+                <input 
+                    type="email" 
+                    name="contact_email" 
+                    id="{{ r_form.contact_email.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 rounded-lg bg-white dark:bg-gray-800 
+                        focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold text-gray-900 dark:text-gray-200"
+                    placeholder="Enter contact email"
+                    value="{{ r_form.contact_email.value|default:'' }}" 
+                />
+                <!-- Display Errors for Contact Email -->
+                {% if r_form.contact_email.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {% for error in r_form.contact_email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Address Information Section -->
+        <div class="location-container">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Address Information</h2>
+
+            <!-- Location Input -->
+            <div class="form-group mb-6">
+                <label for="{{ r_form.location.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Geo Location</label>
+                <input 
+                    type="text" 
+                    name="location" 
+                    id="{{ r_form.location.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                    placeholder="Enter location"
+                    value="{{ r_form.location.value|default:'' }}" 
+                />
+                <!-- Display Errors for Location -->
+                {% if r_form.location.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in r_form.location.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Village and Subdivision Row -->
+            <div class="form-group mb-6 flex space-x-6">
+                <!-- Village Input -->
+                <div class="w-1/2">
+                    <label for="{{ r_form.village.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Village</label>
+                    <input 
+                        type="text" 
+                        name="village" 
+                        id="{{ r_form.village.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter village"
+                        value="{{ r_form.village.value|default:'' }}" 
+                    />
+                    <!-- Display Errors for Village -->
+                    {% if r_form.village.errors %}
+                        <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                            {% for error in r_form.village.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Subdivision Input -->
+                <div class="w-1/2">
+                    <label for="{{ r_form.subdivision.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Subdivision</label>
+                    <input 
+                        type="text" 
+                        name="subdivision" 
+                        id="{{ r_form.subdivision.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter subdivision"
+                        value="{{ r_form.subdivision.value|default:'' }}" 
+                    />
+                    <!-- Display Errors for Subdivision -->
+                    {% if r_form.subdivision.errors %}
+                        <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                            {% for error in r_form.subdivision.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- District, State, and Pincode Row -->
+            <div class="form-group mb-6 flex space-x-6">
+                <!-- District Input -->
+                <div class="w-1/3">
+                    <label for="{{ r_form.district.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">District</label>
+                    <input 
+                        type="text" 
+                        name="district" 
+                        id="{{ r_form.district.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter district"
+                        value="{{ r_form.district.value|default:'' }}" 
+                    />
+                    <!-- Display Errors for District -->
+                    {% if r_form.district.errors %}
+                        <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                            {% for error in r_form.district.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- State Input -->
+                <div class="w-1/3">
+                    <label for="{{ r_form.state.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">State</label>
+                    <input 
+                        type="text" 
+                        name="state" 
+                        id="{{ r_form.state.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter state"
+                        value="{{ r_form.state.value |default:''}}" 
+                    />
+                    <!-- Display Errors for State -->
+                    {% if r_form.state.errors %}
+                        <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                            {% for error in r_form.state.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Pincode Input -->
+                <div class="w-1/3">
+                    <label for="{{ r_form.pincode.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Pincode</label>
+                    <input 
+                        type="text" 
+                        name="pincode" 
+                        id="{{ r_form.pincode.id_for_label }}"
+                        class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                        placeholder="Enter pincode"
+                        value="{{ r_form.pincode.value|default:'' }}" 
+                    />
+                    <!-- Display Errors for Pincode -->
+                    {% if r_form.pincode.errors %}
+                        <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                            {% for error in r_form.pincode.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Area, Unit, and Price Row -->
+        <div class="form-group mb-6 flex items-center space-x-4">
+            <!-- Total Area Input -->
+            <div class="flex-1">
+                <label for="{{ r_form.total_area.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Total Area</label>
+                <input 
+                    type="number" 
+                    name="total_area" 
+                    id="{{ r_form.total_area.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold"
+                    placeholder="Enter total area"
+                    value="{{ r_form.total_area.value }}" 
+                />
+                <!-- Display Errors for Total Area -->
+                {% if r_form.total_area.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in r_form.total_area.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Area Unit Dropdown -->
+            <div class="flex-none w-46">
+                <label for="{{ r_form.area_unit.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Area Unit</label>
+                <select 
+                    name="area_unit" 
+                    id="{{ r_form.area_unit.id_for_label }}"
+                    class="mt-2 p-3 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold"
+                >
+                    <option value="">Select area unit</option>
+                    <option value="SQFT" {% if r_form.area_unit.value == 'SQFT' %}selected{% endif %}>Square Feet</option>
+                    <option value="ACRES" {% if r_form.area_unit.value == 'ACRES' %}selected{% endif %}>Acres</option>
+                    <option value="HECTARES" {% if r_form.area_unit.value == 'HECTARES' %}selected{% endif %}>Hectares</option>
+                    <option value="SQM" {% if r_form.area_unit.value == 'SQM' %}selected{% endif %}>Square Meters</option>
+                </select>
+                <!-- Display Errors for Area Unit -->
+                {% if r_form.area_unit.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in r_form.area_unit.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Price Input -->
+            <div class="flex-1">
+                <label for="{{ r_form.price.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Price</label>
+                <input 
+                    type="number" 
+                    name="price" 
+                    id="{{ r_form.price.id_for_label }}"
+                    class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-lg font-semibold"
+                    placeholder="Enter price"
+                    value="{{ r_form.price.value }}" 
+                />
+                <!-- Display Errors for Price -->
+                {% if r_form.price.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in r_form.price.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Nearby Amenities Input -->
+        <div class="form-group mb-6">
+            <label for="{{ r_form.nearby_amenities.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Nearby Amenities</label>
+            <input 
+                type="text" 
+                name="nearby_amenities" 
+                id="{{ r_form.nearby_amenities.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter nearby amenities"
+                value="{{ r_form.nearby_amenities.value | default:'' }}" 
+            />
+            {% if r_form.nearby_amenities.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.nearby_amenities.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Nearby Places Input -->
+        <div class="form-group mb-6">
+            <label for="{{ r_form.nearby.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Nearby Places</label>
+            <input 
+                type="text" 
+                name="nearby" 
+                id="{{ r_form.nearby.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter nearby places"
+                value="{{ r_form.nearby.value | default:'' }}" 
+            />
+            {% if r_form.nearby.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.nearby.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Distance from Road Input -->
+        <div class="form-group mb-6">
+            <label for="{{ r_form.distance_from_road.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Distance from Road</label>
+            <input 
+                type="text" 
+                name="distance_from_road" 
+                id="{{ r_form.distance_from_road.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter distance from road"
+                value="{{ r_form.distance_from_road.value | default:'' }}" 
+            />
+            {% if r_form.distance_from_road.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.distance_from_road.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        
+
+
+                
+              
+
+        <!-- Bedrooms Input -->
+        <div class="flex-1">
+        <label for="{{ r_form.bedrooms.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Bedrooms</label>
+        <input 
+            type="number" 
+            name="bedrooms" 
+            id="{{ r_form.bedrooms.id_for_label }}"
+            class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+            placeholder="Enter number of bedrooms"
+            value="{{ r_form.bedrooms.value }}" 
+        />
+        {% if r_form.bedrooms.errors %}
+            <div class="text-red-500 text-sm mt-2">
+                {% for error in r_form.bedrooms.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        </div>
+
+        <!-- Bathrooms Input -->
+        <div class="flex-1">
+        <label for="{{ r_form.bathrooms.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Bathrooms</label>
+        <input 
+            type="number" 
+            name="bathrooms" 
+            id="{{ r_form.bathrooms.id_for_label }}"
+            class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+            placeholder="Enter number of bathrooms"
+            value="{{ r_form.bathrooms.value }}" 
+        />
+        {% if r_form.bathrooms.errors %}
+            <div class="text-red-500 text-sm mt-2">
+                {% for error in r_form.bathrooms.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        </div>
+
+
+        <!-- Built-up Area Input -->
+        <div class="flex-1">
+            <label for="{{ r_form.built_up_area.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Built-up Area (sq. ft.)</label>
+            <input 
+                type="number" 
+                name="built_up_area" 
+                id="{{ r_form.built_up_area.id_for_label }}"
+                step="0.01"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter built-up area"
+                value="{{ r_form.built_up_area.value }}" 
+            />
+            {% if r_form.built_up_area.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.built_up_area.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Total Floors Input -->
+        <div class="flex-1">
+            <label for="{{ r_form.total_floors.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Total Floors</label>
+            <input 
+                type="number" 
+                name="total_floors" 
+                id="{{ r_form.total_floors.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter total floors in the building"
+                value="{{ r_form.total_floors.value }}" 
+            />
+            {% if r_form.total_floors.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.total_floors.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Floor Number Input -->
+        <div class="flex-1">
+            <label for="{{ r_form.floor_number.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Floor Number</label>
+            <input 
+                type="number" 
+                name="floor_number" 
+                id="{{ r_form.floor_number.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter floor number (for apartments)"
+                value="{{ r_form.floor_number.value }}" 
+            />
+            {% if r_form.floor_number.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.floor_number.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Balcony Count Input -->
+        <div class="flex-1">
+            <label for="{{ r_form.balcony_count.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Balcony Count</label>
+            <input 
+                type="number" 
+                name="balcony_count" 
+                id="{{ r_form.balcony_count.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter number of balconies"
+                value="{{ r_form.balcony_count.value }}" 
+            />
+            {% if r_form.balcony_count.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.balcony_count.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Year Built Input -->
+        <div class="flex-1">
+            <label for="{{ r_form.year_built.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Year Built</label>
+            <input 
+                type="number" 
+                name="year_built" 
+                id="{{ r_form.year_built.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+                placeholder="Enter year built"
+                value="{{ r_form.year_built.value }}" 
+            />
+            {% if r_form.year_built.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.year_built.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Furnishing Status Dropdown -->
+        <div class="flex-1">
+            <label for="{{ r_form.furnishing_status.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Furnishing Status</label>
+            <select 
+                name="furnishing_status" 
+                id="{{ r_form.furnishing_status.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+            >
+                <option value="">Select furnishing status</option>
+                <option value="FURNISHED" {% if r_form.furnishing_status.value == 'FURNISHED' %}selected{% endif %}>Furnished</option>
+                <option value="SEMI_FURNISHED" {% if r_form.furnishing_status.value == 'SEMI_FURNISHED' %}selected{% endif %}>Semi-Furnished</option>
+                <option value="UNFURNISHED" {% if r_form.furnishing_status.value == 'UNFURNISHED' %}selected{% endif %}>Unfurnished</option>
+            </select>
+            {% if r_form.furnishing_status.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.furnishing_status.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Parking Dropdown -->
+        <div class="flex-1">
+            <label for="{{ r_form.parking.id_for_label }}" class="block text-gray-700 dark:text-gray-300 text-lg font-medium">Parking</label>
+            <select 
+                name="parking" 
+                id="{{ r_form.parking.id_for_label }}"
+                class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold"
+            >
+                <option value="">Select parking type</option>
+                <option value="NONE" {% if r_form.parking.value == 'NONE' %}selected{% endif %}>No Parking</option>
+                <option value="COVERED" {% if r_form.parking.value == 'COVERED' %}selected{% endif %}>Covered Parking</option>
+                <option value="OPEN" {% if r_form.parking.value == 'OPEN' %}selected{% endif %}>Open Parking</option>
+            </select>
+            {% if r_form.parking.errors %}
+                <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                    {% for error in r_form.parking.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+          
+        <div class="mt-2 p-4 w-full border-2 border-indigo-300 dark:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg font-semibold">
+            <!-- Security Checkbox -->
+            <div class="form-group mb-6 flex items-center">
+                <input 
+                    type="checkbox" 
+                    name="has_security" 
+                    id="{{ r_form.has_security.id_for_label }}"
+                    class="mr-2 w-6 h-6 text-indigo-500 border-2 border-indigo-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
+                    {% if r_form.has_security.value %}checked{% endif %}
+                />
+                <label for="{{ r_form.has_security.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Has Security</label>
+            </div>
+
+            <!-- Has Garden Checkbox -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <label for="{{ r_form.has_garden.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Has Garden</label>
+                <input 
+                    type="checkbox" 
+                    name="has_garden" 
+                    id="{{ r_form.has_garden.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 dark:text-indigo-400 border-2 border-indigo-300 dark:border-indigo-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                    {% if r_form.has_garden.value %}checked{% endif %}
+                />
+                {% if r_form.has_garden.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in r_form.has_garden.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Has Pool Checkbox -->
+            <div class="form-group mb-6 flex items-center space-x-2">
+                <label for="{{ r_form.has_pool.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Has Pool</label>
+                <input 
+                    type="checkbox" 
+                    name="has_pool" 
+                    id="{{ r_form.has_pool.id_for_label }}"
+                    class="h-5 w-5 text-indigo-500 dark:text-indigo-400 border-2 border-indigo-300 dark:border-indigo-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                    {% if r_form.has_pool.value %}checked{% endif %}
+                />
+                {% if r_form.has_pool.errors %}
+                    <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                        {% for error in r_form.has_pool.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Checkbox Section - 3 Columns on Larger Screens -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Is Published -->
+                <div class="form-group mb-6 flex items-center space-x-2">
+                    <label for="{{ r_form.is_published.id_for_label }}" class="text-gray-700 dark:text-gray-300 text-lg font-medium">Is Published?</label>
+                    <input 
+                        type="checkbox" 
+                        name="is_published" 
+                        id="{{ r_form.is_published.id_for_label }}"
+                        class="h-5 w-5 text-indigo-500 dark:text-indigo-400 border-2 border-indigo-300 dark:border-indigo-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                        {% if r_form.is_published.value %}checked{% endif %}
+                    />
+                    {% if r_form.is_published.errors %}
+                        <div class="text-red-500 dark:text-red-400 text-sm mt-2">
+                            {% for error in r_form.is_published.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+  
+
+
+
+
+
+<div class="form-group">
+    <label for="id_images" class="block text-gray-700">Upload Images</label>
+    <input type="file" name="images" id="id_images" multiple class="mt-2 p-2 border border-gray-300 rounded-lg">
+</div>
+
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" name="residential_property_form" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Submit Residential Property</button>
+        </div>
+    </form>
+</section>

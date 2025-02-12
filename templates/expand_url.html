@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expand Google Maps URL</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; }
+        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; }
+        .result { margin-top: 15px; padding: 10px; background: #e3f2fd; border-left: 5px solid #2196F3; text-align: left; }
+        .error { background: #ffebee; border-left: 5px solid #d32f2f; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Google Maps URL Expander</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="short_url" placeholder="Enter Google Maps Short URL" required>
+        <button type="submit">Expand URL</button>
+    </form>
+    
+    {% if error_message %}
+        <div class="result error"><strong>Error:</strong> {{ error_message }}</div>
+    {% endif %}
+    
+    {% if full_url %}
+        <div class="result">
+            <p><strong>Full URL:</strong> <a href="{{ full_url }}" target="_blank">{{ full_url }}</a></p>
+            <p><strong>Extracted Location:</strong> {{ location }}</p>
+            <p><strong>Latitude:</strong> {{ latitude }}</p>
+            <p><strong>Longitude:</strong> {{ longitude }}</p>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>

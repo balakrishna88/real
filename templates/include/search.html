@@ -1,0 +1,85 @@
+<form method="GET" action="{% url 'mysearch' %}" class="bg-white p-4 m-2 rounded-lg shadow-lg w-[98%] mx-auto dark:bg-gray-800 dark:text-white">
+  
+  <!-- Deal Type Buttons (Top Row) -->
+  <div class="flex justify-left gap-4 mb-4">
+    <input type="hidden" name="deal_type" id="deal_type_input" value="{{ request.GET.deal_type }}">
+
+    <button type="button" onclick="selectDealType('SELL')" class="px-6 py-2 rounded-md font-medium shadow-md transition-colors 
+    {% if request.GET.deal_type == 'SELL' %}bg-indigo-600 text-white{% else %}bg-blue-500 text-white hover:bg-blue-600{% endif %}">
+      Sell
+    </button>
+    
+    <button type="button" onclick="selectDealType('BUY')" class="px-6 py-2 rounded-md font-medium shadow-md transition-colors 
+    {% if request.GET.deal_type == 'BUY' %}bg-indigo-600 text-white{% else %}bg-blue-500 text-white hover:bg-blue-600{% endif %}">
+      Buy
+    </button>
+    
+    <button type="button" onclick="selectDealType('RENT')" class="px-6 py-2 rounded-md font-medium shadow-md transition-colors 
+    {% if request.GET.deal_type == 'RENT' %}bg-indigo-600 text-white{% else %}bg-blue-500 text-white hover:bg-blue-600{% endif %}">
+      Rent
+    </button>
+</div>
+
+
+  <!-- Filters (State, District, etc.) -->
+  <div class="flex flex-wrap gap-4 items-center">
+    
+    <!-- State Dropdown -->
+    <div class="flex-1 min-w-[200px]">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">State</label>
+      <select name="state" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <option value="">Choose State</option>
+        {% for state in states %}
+          <option value="{{ state }}" {% if state == request.GET.state %}selected{% endif %}>{{ state }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- District Dropdown -->
+    <div class="flex-1 min-w-[200px]">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">District</label>
+      <select name="district" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <option value="">Choose District</option>
+        {% for district in districts %}
+          <option value="{{ district }}" {% if district == request.GET.district %}selected{% endif %}>{{ district }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Subdistrict Dropdown -->
+    <div class="flex-1 min-w-[200px]">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subdistrict</label>
+      <select name="subdistrict" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <option value="">Choose Subdistrict</option>
+        {% for subdivision in subdivisions %}
+          <option value="{{ subdivision }}" {% if subdivision == request.GET.subdivision %}selected{% endif %}>{{ subdivision }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Village Search Input -->
+    <div class="flex-1 min-w-[200px]">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search Village</label>
+      <input type="text" name="village" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Search Village">
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex-shrink-0 mt-4">
+      <button type="submit" class="px-6 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-green-600 hover:bg-green-700">
+        Search
+      </button>
+    </div>
+
+  </div>
+</form>
+
+<script>
+  function selectDealType(type) {
+    document.getElementById('deal_type_input').value = type;
+    document.querySelectorAll("button[type='button']").forEach(btn => {
+      btn.classList.remove("bg-indigo-600", "text-white");
+      btn.classList.add("bg-gray-200", "text-gray-700");
+    });
+    event.target.classList.add("bg-indigo-600", "text-white");
+  }
+</script>

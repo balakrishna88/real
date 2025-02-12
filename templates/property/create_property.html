@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Property</title>
+    <!-- Bootstrap CSS (optional) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Create Property</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ property_form.as_p }}
+
+            <div class="form-group">
+                <label for="id_images">Upload Images</label>
+                <input type="file" name="images" id="id_images" multiple class="form-control-file">
+            </div>
+
+            <!-- Documents -->
+            <h3>Documents</h3>
+            <div class="form-group">
+                <label for="id_documents">Upload Documents</label>
+                <input type="file" name="documents" id="id_documents" multiple class="form-control-file">
+            </div>
+
+            <!-- Videos -->
+            <h3>Videos</h3>
+            <div class="form-group">
+                <label for="id_videos">Upload Videos</label>
+                <input type="file" name="videos" id="id_videos" multiple class="form-control-file">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

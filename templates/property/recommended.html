@@ -1,0 +1,87 @@
+{% load static %}
+
+
+{% if properties %}
+
+<section class="w-auto p-6 rounded-lg shadow-lg m-4 bg-white dark:bg-gray-800 dark:text-white transition duration-300">
+    <h2 class="text-md font-semibold mb-3 dark:text-gray-200">Nearby Properties</h2>
+    <div class="bg-gray-100 p-4 rounded-lg shadow dark:bg-gray-700">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {% for property in properties|slice:":6" %}
+                <div class="bg-white p-3 rounded-md shadow-sm hover:shadow-md transition duration-300 text-center dark:bg-gray-900 dark:border-gray-700">
+                    <!-- Property Image (Small Size) -->
+                    <a href="{% url 'property_detail' property.slug %}">
+
+                        <img class="w-24 h-24 object-cover mx-auto rounded-md" 
+                             src="{% if property.image %}{{ property.image.url }}{% else %}{% static 'images/nophoto.jpg' %}{% endif %}" 
+                             alt="{{ property.title }}">
+                    </a>
+
+                    <!-- Property Title (Smaller Font) -->
+                    <h3 class="mt-2 text-sm font-medium text-gray-800 truncate dark:text-gray-300">
+                        <a href="{% url 'property_detail' property.slug %}" class="hover:text-blue-600 dark:hover:text-blue-400">
+                            {{ property.title }}
+                        </a>
+                    </h3>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endif %}
+
+
+
+<section class="w-auto p-6 rounded-lg shadow-lg m-4 bg-white dark:bg-gray-800 dark:text-white transition duration-300">
+    <h2 class="text-md font-semibold mb-3 dark:text-gray-200">Recommended Properties</h2>
+
+    <!-- Nearby Posts (Horizontal Row) -->
+    <div class="bg-gray-100 p-4 rounded-lg shadow dark:bg-gray-700">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {% if random_posts %}
+                {% for post in random_posts %}
+                    <div class="bg-white p-3 rounded-md shadow-sm hover:shadow-md transition duration-300 text-center 
+                                dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300">
+                        <!-- Access the first image of the property or use a fallback -->
+                        <img class="w-24 h-24 object-cover mx-auto rounded-md" 
+                             src="{% if post.images.first %}{{ post.images.first.image.url }}{% else %}{% static 'images/nophoto.jpg' %}{% endif %}" 
+                             alt="{{ post.title }}">
+                        <h3 class="mt-2 text-lg font-semibold dark:text-gray-100">{{ post.title }}</h3>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-500 dark:text-gray-400">No nearby posts available.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+
+<!-- 
+<section class="w-auto bg-white p-6 rounded-lg shadow-lg m-4">
+    
+    <h2 class="text-xl font-semibold mb-4">Recommended Posts</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="bg-gray-100 p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+            <img class="w-full h-40 object-cover rounded-lg" src="https://via.placeholder.com/300" alt="Recommended Post">
+            <h3 class="mt-2 text-lg font-semibold">Recommended Post 1</h3>
+            <p class="text-sm text-gray-600">Brief details about this post...</p>
+            <a href="#" class="text-blue-500 hover:underline text-sm mt-2 inline-block">Read More</a>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+            <img class="w-full h-40 object-cover rounded-lg" src="https://via.placeholder.com/300" alt="Recommended Post">
+            <h3 class="mt-2 text-lg font-semibold">Recommended Post 2</h3>
+            <p class="text-sm text-gray-600">Brief details about this post...</p>
+            <a href="#" class="text-blue-500 hover:underline text-sm mt-2 inline-block">Read More</a>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+            <img class="w-full h-40 object-cover rounded-lg" src="https://via.placeholder.com/300" alt="Recommended Post">
+            <h3 class="mt-2 text-lg font-semibold">Recommended Post 3</h3>
+            <p class="text-sm text-gray-600">Brief details about this post...</p>
+            <a href="#" class="text-blue-500 hover:underline text-sm mt-2 inline-block">Read More</a>
+        </div>
+    </div>
+</section> -->

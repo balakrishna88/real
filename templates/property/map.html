@@ -1,0 +1,45 @@
+<!-- Include Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<h2>Leaflet Map Example</h2>
+
+<!-- Map container -->
+<div id="map" style="height: 400px;"></div>
+
+<!-- Include Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Modal for Enlarged Image -->
+<div id="imageModal" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white p-4 rounded-lg w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 relative">
+        <!-- Close Button -->
+        <a href="#" class="absolute top-2 right-2 text-3xl text-white cursor-pointer">&times;</a>
+        <img src="https://via.placeholder.com/500" alt="Image" class="w-full h-auto rounded-lg">
+        <p class="text-center mt-2 text-sm text-gray-700">This is a description for the image.</p>
+    </div>
+</div>
+
+<!-- Display the map and markers -->
+<script>
+  // Initialize the map
+  var map = L.map('map').setView([51.505, -0.09], 13); // Latitude and Longitude of the initial view
+
+  // Add the tile layer (OpenStreetMap in this case)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Add a marker
+  L.marker([51.505, -0.09]).addTo(map)
+    .bindPopup("This is a marker.")
+    .openPopup();
+
+  // Optionally, add more markers or other features
+  L.marker([51.515, -0.10]).addTo(map)
+    .bindPopup("Another marker.");
+
+  // Example of opening the modal when clicking on a marker (this is just an example)
+  L.marker([51.525, -0.12]).addTo(map)
+    .bindPopup('<a href="#imageModal">Open Modal</a>') // This will open the modal when clicked
+    .openPopup();
+</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nearby Properties</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <h2>Nearby Properties (within 100km)</h2>
+    <div id="map" style="height: 500px;"></div>
+
+    <script>
+        var map = L.map('map').setView([{{ lat }}, {{ lon }}], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Mark user location
+        L.marker([{{ lat }}, {{ lon }}]).addTo(map)
+            .bindPopup("You are here").openPopup();
+
+        // Plot nearby properties
+        {% for property in properties %}
+            L.marker([{{ property.latitude }}, {{ property.longitude }}])
+                .addTo(map)
+                .bindPopup(
+                    `<b>{{ property.title }}</b><br>
+                    <a href="{% url 'property_detail' property.id %}" target="_blank">View Property ({{ property.distance }} km)</a>`
+                );
+        {% endfor %}
+    </script>
+</body>
+</html>

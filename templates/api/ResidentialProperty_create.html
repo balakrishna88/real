@@ -1,0 +1,29 @@
+<!-- templates/api/create.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Resident Property</title>
+</head>
+<body>
+    <h1>Create Resident Property</h1>
+    <p>{{ auth_status }}</p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <label for="images">Upload Images:</label>
+        <input type="file" name="images" multiple><br>
+
+        <label for="documents">Upload Documents:</label>
+        <input type="file" name="documents" multiple><br>
+
+        <label for="videos">Upload Videos:</label>
+        <input type="file" name="videos" multiple><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

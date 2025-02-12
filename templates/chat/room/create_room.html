@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-4">
+    <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Create a New Room</h2>
+
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Search Input for Users -->
+        <div class="mb-4">
+            <label for="search_user" class="block text-lg font-medium text-gray-700 dark:text-gray-300">Search for a User</label>
+            <div class="flex space-x-2">
+                <input type="text" id="search_user" name="search_user" class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search for a user..." onkeyup="filterUsers()">
+                <button type="button" onclick="clearSearch()" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- List of Users (filtered by search input) -->
+        <div id="user_list" class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-60 overflow-y-auto border border-gray-300 dark:border-gray-600 p-2 rounded-lg bg-gray-50 dark:bg-gray-900">
+            {% for user in users %}
+            <div class="user-item p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 w-full transition" data-user-id="{{ user.id }}" onclick="selectUser('{{ user.id }}', '{{ user.username }}')">
+                <div class="flex flex-col items-center">
+                    <!-- Avatar -->
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full flex items-center justify-center">
+                        <span class="text-xl font-semibold">{{ user.username|slice:":1" }}</span>
+                    </div>
+                    <!-- Username -->
+                    <p class="mt-2 text-center text-gray-900 dark:text-gray-100">{{ user.username }}</p>
+                </div>
+            </div>
+            {% empty %}
+                <p class="text-gray-600 dark:text-gray-400">No users found.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Hidden Input to store selected user -->
+        <input type="hidden" name="selected_user" id="selected_user">
+
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition shadow-md">
+            Create Room
+        </button>
+    </form>
+</div>
+
+<script>
+    // Filter users based on the search input
+    function filterUsers() {
+        const searchQuery = document.getElementById('search_user').value.toLowerCase();
+        const userItems = document.querySelectorAll('.user-item');
+
+        userItems.forEach(item => {
+            const username = item.querySelector('p').textContent.toLowerCase();
+            item.style.display = username.includes(searchQuery) ? '' : 'none';
+
+            if (searchQuery === '') {
+                item.style.display = '';
+            }
+        });
+    }
+
+    // Function to handle selecting a user
+    function selectUser(userId, username) {
+        document.getElementById('selected_user').value = userId;
+        document.getElementById('search_user').value = username;
+        document.getElementById('user_list').style.display = 'none';
+    }
+
+    // Function to clear the search input
+    function clearSearch() {
+        document.getElementById('search_user').value = '';
+        filterUsers();
+    }
+</script>
+
+{% endblock %}

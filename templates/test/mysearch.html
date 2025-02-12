@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white m-4 p-6 rounded-lg shadow-lg w-[98%] mx-auto dark:bg-gray-800 dark:text-white">
+  <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Search Properties</h2>
+
+  <!-- 🔍 Search Form & Location Button (Same Row) -->
+  <form method="GET" action="{% url 'mysearch' %}" class="mb-4 flex flex-wrap gap-4 items-center">
+    <input type="text" name="search_query" placeholder="Search properties with title, district, village ..." value="{{ search_query }}"
+      class="w-[30%] px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+
+    <select name="deal_type" class="px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white">
+        <option value="">All</option>
+        <option value="SELL" {% if deal_type == "SELL" %}selected{% endif %}>Sell</option>
+        <option value="BUY" {% if deal_type == "BUY" %}selected{% endif %}>Buy</option>
+        <option value="RENT" {% if deal_type == "RENT" %}selected{% endif %}>Rent</option>
+    </select>
+
+    <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md">
+      Search
+    </button>
+
+    <!-- 📍 Location Button -->
+    <button type="button" onclick="getLocation()" class="px-6 py-2 rounded-md font-medium shadow-md bg-blue-600 text-white">
+      Use My Location
+    </button>
+    
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    <p id="locationDisplay" class="text-gray-700 dark:text-gray-300"></p>
+  </form>
+
+  <!-- 🎯 Filter Form (Next Row) -->
+  <form method="GET" action="{% url 'mysearch' %}" class="mb-4 flex flex-wrap gap-2">
+    <input type="text" name="state" placeholder="State" value="{{ state }}" class="px-4 py-2 border rounded-md shadow-sm sm:w-1/2 md:w-1/4 dark:bg-gray-700 dark:text-white">
+    <input type="text" name="district" placeholder="District" value="{{ district }}" class="px-4 py-2 border rounded-md shadow-sm sm:w-1/2 md:w-1/4 dark:bg-gray-700 dark:text-white">
+    <input type="text" name="subdivision" placeholder="Subdivision" value="{{ subdivision }}" class="px-4 py-2 border rounded-md shadow-sm sm:w-1/2 md:w-1/4 dark:bg-gray-700 dark:text-white">
+    <input type="text" name="village" placeholder="Village" value="{{ village }}" class="px-4 py-2 border rounded-md shadow-sm sm:w-1/2 md:w-1/4 dark:bg-gray-700 dark:text-white">
+    
+    <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md">
+      Apply Filters
+    </button>
+  </form>
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          let lat = position.coords.latitude;
+          let lon = position.coords.longitude;
+  
+          document.getElementById("latitude").value = lat;
+          document.getElementById("longitude").value = lon;
+  
+          // Display the coordinates
+          let locationDisplay = document.getElementById("locationDisplay");
+          locationDisplay.innerText = `📍 Latitude: ${lat}, Longitude: ${lon}`;
+          locationDisplay.style.display = "block";  // Ensure it's visible
+  
+          // Hide coordinates after 5 seconds
+          setTimeout(() => {
+            locationDisplay.innerText = "";
+            locationDisplay.style.display = "none"; 
+          }, 10000);
+  
+          // Automatically submit the form to fetch properties
+          setTimeout(() => {
+            document.forms[0].submit();
+          }, 1000);
+  
+        }, error => {
+          alert("Location access denied. Please enable location services.");
+        });
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+  </script>
+
+  <!-- 📌 Display Search Results -->
+  {% if properties %}
+    <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
+      <h3 class="text-lg font-medium text-gray-800 dark:text-white">Results:</h3>
+      <ul class="mt-2 list-disc pl-6">
+        {% for property in properties %}
+          <li class="py-2">
+            <span class="font-semibold text-indigo-600 dark:text-indigo-400">{{ property.title }}</span> 
+            - {{ property.village }}, {{ property.subdivision }}, {{ property.district }}, {{ property.state }} 
+            ({{ property.get_deal_type_display }})
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <p class="text-red-500 text-lg">No properties found.</p>
+  {% endif %}
+
+  <!-- 🔄 Reset Button -->
+  <a href="{% url 'mysearch' %}" class="mt-4 block text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+    Reset Search
+  </a>
+</div>
+{% endblock %}

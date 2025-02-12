@@ -1,0 +1,118 @@
+<!-- dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - My Website{% endblock %}
+
+{% block content %}
+<div class="flex">
+
+  <!-- Sidebar -->
+  <div class="w-64 bg-gray-800 text-white p-5 h-screen">
+    <h2 class="text-2xl font-semibold text-center text-black">Dashboard</h2>
+    <h2 class="text-2xl font-semibold text-center" style="color: black;">Dashboard</h2>
+
+    <nav class="mt-8">
+      <ul>
+        <li class="mb-4">
+          <a href="#" class="block py-3 px-4 bg-white text-gray-800 rounded-lg hover:bg-gray-200 transition duration-300">
+            Home
+          </a>
+        </li>
+        <li class="mb-4">
+          <a href="#" class="block py-3 px-4 bg-white text-gray-800 rounded-lg hover:bg-gray-200 transition duration-300">
+            Analytics
+          </a>
+        </li>
+        <li class="mb-4">
+          <a href="#" class="block py-3 px-4 bg-white text-gray-800 rounded-lg hover:bg-gray-200 transition duration-300">
+            Posts
+          </a>
+        </li>
+        <li class="mb-4">
+          <a href="#" class="block py-3 px-4 bg-white text-gray-800 rounded-lg hover:bg-gray-200 transition duration-300">
+            Users
+          </a>
+        </li>
+        <li class="mb-4">
+          <a href="#" class="block py-3 px-4 bg-white text-gray-800 rounded-lg hover:bg-gray-200 transition duration-300">
+            Settings
+          </a>
+        </li>
+        <li class="mb-4">
+          <a href="#" class="block py-3 px-4 bg-white text-gray-800 rounded-lg hover:bg-gray-200 transition duration-300">
+            Logout
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  
+
+  <!-- Main Content -->
+  <div class="flex-1 p-6">
+
+    <h1 class="text-3xl font-bold mb-6">Welcome to your Dashboard {{ username }}</h1>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+        <span class="text-4xl text-gray-700">📈</span>
+        <h3 class="text-xl font-semibold mt-2">Visitors</h3>
+        <p class="text-lg text-gray-500">1,250</p>
+      </div>
+
+      <a href="{% url 'dash_user_post' %}" class="block">
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 cursor-pointer">
+            <span class="text-4xl text-gray-700">📄</span>
+            <h3 class="text-xl font-semibold mt-2">Posts</h3>
+            <p class="text-lg text-gray-500">345</p>
+        </div>
+    </a>
+    
+    <a href="{% url 'group_settings' %}" class="block">
+      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+        <span class="text-4xl text-gray-700">👥</span>
+        <h3 class="text-xl font-semibold mt-2">Manage Groups</h3>
+        <p class="text-lg text-gray-500">2,380</p>
+      </div>
+    </a>
+
+    <a href="{% url 'profile' %}" class="block">
+      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+        <span class="text-4xl text-gray-700">⚙️</span>
+        <h3 class="text-xl font-semibold mt-2">Edit Profile</h3>
+        <p class="text-lg text-gray-500">1,120</p>
+      </div>
+    </div>
+  </a>
+    <!-- Recent Activity -->
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold mb-6">Recent Activity</h2>
+
+      <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+        <h4 class="text-xl font-semibold">New Post Published</h4>
+        <p class="text-lg text-gray-700">A new post titled "Understanding Blockchain" was published.</p>
+        <span class="text-sm text-gray-500">5 minutes ago</span>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+        <h4 class="text-xl font-semibold">User Signed Up</h4>
+        <p class="text-lg text-gray-700">John Doe signed up on the platform.</p>
+        <span class="text-sm text-gray-500">10 minutes ago</span>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+        <h4 class="text-xl font-semibold">Comment Added</h4>
+        <p class="text-lg text-gray-700">Jane Smith added a comment on the "Tech Trends" post.</p>
+        <span class="text-sm text-gray-500">20 minutes ago</span>
+      </div>
+    </div>
+
+
+    <!-- Include Recent Posts Section -->
+    {% include 'account/dashboard/dash_user_post.html' %}
+
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expand Google Maps Short Link</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 60%;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Expand Google Maps Short Link</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="short_url" placeholder="Enter Google Maps Short Link" required>
+        <button type="submit">Expand URL</button>
+    </form>
+
+    <div class="result">
+        {% if full_url %}
+            <p><strong>Full URL:</strong> <a href="{{ full_url }}" target="_blank">{{ full_url }}</a></p>
+        {% elif error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

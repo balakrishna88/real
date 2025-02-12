@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<body class="font-sans bg-gray-100 p-6">
+    
+    <div class="w-auto bg-white dark:bg-gray-800 rounded-lg shadow-md m-4 p-6 flex flex-col items-center">
+        <h1 class="text-3xl text-gray-800 dark:text-white">Create Property Post</h1>
+        <p class="text-gray-600 mt-2 dark:text-gray-300">Choose options to proceed.</p>
+    
+        <!-- Radio Buttons -->
+        <div class="mt-6">
+            <label class="inline-block mr-6 text-lg text-gray-700 dark:text-gray-300">
+                <input type="radio" name="section" value="l" checked onchange="toggleSection()" class="mr-2"> Land Section
+            </label>
+            <label class="inline-block mr-6 text-lg text-gray-700 dark:text-gray-300">
+                <input type="radio" name="section" value="r" onchange="toggleSection()" class="mr-2"> Residential Section
+            </label>
+            <label class="inline-block mr-6 text-lg text-gray-700 dark:text-gray-300">
+                <input type="radio" name="section" value="c" onchange="toggleSection()" class="mr-2"> Commercial Section
+            </label>
+            <label class="inline-block text-lg text-gray-700 dark:text-gray-300">
+                <input type="radio" name="section" value="i" onchange="toggleSection()" class="mr-2"> Industrial Section
+            </label>
+        </div>
+    </div>
+    
+
+    <!-- Sections for each Property Type -->
+    <div id="l-section" class="section m-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hidden">
+        {% include 'property/create/l.html' %}
+    </div>
+
+    <div id="r-section" class="section m-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hidden">
+        {% include 'property/create/r.html' %}
+    </div>
+
+    <div id="c-section" class="section m-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hidden">
+        {% include 'property/create/c.html' %}
+    </div>
+
+    <div id="i-section" class="section m-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hidden">
+        {% include 'property/create/i.html' %}
+    </div>
+
+    <!-- JavaScript to Toggle Sections -->
+    <script>
+        function toggleSection() {
+            const selectedSection = document.querySelector('input[name="section"]:checked').value;
+
+            // Hide all sections
+            document.getElementById('l-section').classList.add('hidden');
+            document.getElementById('r-section').classList.add('hidden');
+            document.getElementById('c-section').classList.add('hidden');
+            document.getElementById('i-section').classList.add('hidden');
+
+            // Show selected section
+            if (selectedSection === 'l') {
+                document.getElementById('l-section').classList.remove('hidden');
+            } else if (selectedSection === 'r') {
+                document.getElementById('r-section').classList.remove('hidden');
+            } else if (selectedSection === 'c') {
+                document.getElementById('c-section').classList.remove('hidden');
+            } else if (selectedSection === 'i') {
+                document.getElementById('i-section').classList.remove('hidden');
+            }
+        }
+
+        // Initialize the page with the default section visible
+        window.onload = toggleSection;
+    </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,43 @@
+<h1>Pending Join Requests for {{ group.name }}</h1>
+
+<ul>
+    {% for request in pending_requests %}
+    <li>
+        <strong>{{ request.user.username }}</strong> - {{ request.timestamp }}
+        <form class="inline-form" method="POST" action="/handle-request-action/{{ request.id }}/">
+            {% csrf_token %}
+            <button name="action" value="approve" class="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition-colors">Approve</button>
+            <button name="action" value="reject" class="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors">Reject</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+    document.querySelectorAll('.inline-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const action = formData.get('action');
+            const requestId = this.getAttribute('action').split('/').slice(-2, -1)[0];
+
+            fetch(`/handle-request-action/${requestId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ action: action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    location.reload(); // Refresh the page to reflect changes
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+</script>

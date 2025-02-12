@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ property.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .property-details {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .property-details h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .property-details p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .property-details .label {
+            font-weight: bold;
+            color: #333;
+        }
+        .property-details .section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="property-details">
+        <h1>{{ property.title }}</h1>
+        <p><span class="label">Description:</span> {{ property.description }}</p>
+        <p><span class="label">Location:</span> {{ property.location }}</p>
+        <p><span class="label">Contact Phone:</span> {{ property.contact_phone }}</p>
+        <p><span class="label">Contact Email:</span> {{ property.contact_email }}</p>
+        <p><span class="label">Country:</span> {{ property.country }}</p>
+        <p><span class="label">State:</span> {{ property.state }}</p>
+        <p><span class="label">District:</span> {{ property.district }}</p>
+        <p><span class="label">Subdivision:</span> {{ property.subdivision }}</p>
+        <p><span class="label">Village:</span> {{ property.village }}</p>
+        <p><span class="label">Pincode:</span> {{ property.pincode }}</p>
+        <p><span class="label">Deal Type:</span> {{ property.deal_type }}</p>
+        <p><span class="label">Status:</span> {{ property.status }}</p>
+        <p><span class="label">Listing Date:</span> {{ property.listing_date }}</p>
+        <p><span class="label">Published:</span> {% if property.is_published %}Yes{% else %}No{% endif %}</p>
+        <p><span class="label">Featured:</span> {% if property.featured %}Yes{% else %}No{% endif %}</p>
+
+        <!-- Dynamic Fields Based on Child Model -->
+        {% if land_property %}
+            <div class="section">
+                <h2>Land Property Details</h2>
+                <p><span class="label">Property Type:</span> {{ land_property.property_type }}</p>
+                <p><span class="label">Total Area:</span> {{ land_property.total_area }} {{ land_property.area_unit }}</p>
+                <p><span class="label">Price:</span> {{ land_property.price }}</p>
+                <p><span class="label">Has Water:</span> {% if land_property.has_water %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Has Electricity:</span> {% if land_property.has_electricity %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Is Corner Plot:</span> {% if land_property.is_corner_plot %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Soil Type:</span> {{ land_property.soil_type }}</p>
+                <p><span class="label">Irrigation Facilities:</span> {% if land_property.irrigation_facilities %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Facing:</span> {{ land_property.facing }}</p>
+            </div>
+        {% elif residential_property %}
+            <div class="section">
+                <h2>Residential Property Details</h2>
+                <p><span class="label">Property Type:</span> {{ residential_property.property_type }}</p>
+                <p><span class="label">Bedrooms:</span> {{ residential_property.bedrooms }}</p>
+                <p><span class="label">Bathrooms:</span> {{ residential_property.bathrooms }}</p>
+                <p><span class="label">Furnishing Status:</span> {{ residential_property.furnishing_status }}</p>
+                <p><span class="label">Parking:</span> {{ residential_property.parking }}</p>
+                <p><span class="label">Built-Up Area:</span> {{ residential_property.built_up_area }} Sq. Ft.</p>
+                <p><span class="label">Total Floors:</span> {{ residential_property.total_floors }}</p>
+                <p><span class="label">Floor Number:</span> {{ residential_property.floor_number }}</p>
+                <p><span class="label">Balcony Count:</span> {{ residential_property.balcony_count }}</p>
+                <p><span class="label">Has Garden:</span> {% if residential_property.has_garden %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Has Pool:</span> {% if residential_property.has_pool %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Year Built:</span> {{ residential_property.year_built }}</p>
+                <p><span class="label">Price:</span> {{ residential_property.price }}</p>
+            </div>
+        {% elif commercial_property %}
+            <div class="section">
+                <h2>Commercial Property Details</h2>
+                <p><span class="label">Property Type:</span> {{ commercial_property.property_type }}</p>
+                <p><span class="label">Area:</span> {{ commercial_property.area }} Sq. Ft.</p>
+                <p><span class="label">Furnishing Status:</span> {{ commercial_property.furnishing_status }}</p>
+                <p><span class="label">Parking:</span> {{ commercial_property.parking }}</p>
+                <p><span class="label">Year Built:</span> {{ commercial_property.year_built }}</p>
+                <p><span class="label">Price:</span> {{ commercial_property.price }}</p>
+                <p><span class="label">Total Floors:</span> {{ commercial_property.total_floors }}</p>
+                <p><span class="label">Floor Number:</span> {{ commercial_property.floor_number }}</p>
+                <p><span class="label">Has Air Conditioning:</span> {% if commercial_property.has_air_conditioning %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Has Elevator:</span> {% if commercial_property.has_elevator %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Is Renovated:</span> {% if commercial_property.is_renovated %}Yes{% else %}No{% endif %}</p>
+            </div>
+        {% elif industrial_property %}
+            <div class="section">
+                <h2>Industrial Property Details</h2>
+                <p><span class="label">Property Type:</span> {{ industrial_property.property_type }}</p>
+                <p><span class="label">Area:</span> {{ industrial_property.area }} Sq. Ft.</p>
+                <p><span class="label">Furnishing Status:</span> {{ industrial_property.furnishing_status }}</p>
+                <p><span class="label">Parking:</span> {{ industrial_property.parking }}</p>
+                <p><span class="label">Year Built:</span> {{ industrial_property.year_built }}</p>
+                <p><span class="label">Price:</span> {{ industrial_property.price }}</p>
+                <p><span class="label">Total Floors:</span> {{ industrial_property.total_floors }}</p>
+                <p><span class="label">Floor Number:</span> {{ industrial_property.floor_number }}</p>
+                <p><span class="label">Has Lift:</span> {% if industrial_property.has_lift %}Yes{% else %}No{% endif %}</p>
+                <p><span class="label">Has Security:</span> {% if industrial_property.has_security %}Yes{% else %}No{% endif %}</p>
+            </div>
+        {% endif %}
+
+        <hr>
+        <form action="{% url 'track_like' property_id=property.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="like-button">👍 Like</button>
+        </form>
+        
+        <hr>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
+  {% if property_type %}
+    {{ property_type|title }} Properties
+  {% else %}
+    All Properties
+  {% endif %}
+</h1>
+
+<section class="m-6 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for property in page_obj %}
+      <div class="relative p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
+                  hover:shadow-xl transition-all duration-300 flex flex-col justify-between" onclick="window.location.href='{% url 'property_detail' property.slug %}'">
+        
+        <!-- Property Image with Deal Type Badge -->
+        <div class="relative">
+          {% if property.images.all %}
+            <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" class="w-full h-40 object-cover rounded-lg">
+          {% else %}
+            <img src="{% static 'images/nophoto.jpg' %}" alt="No Image Available" class="w-full h-40 object-cover rounded-lg">
+          {% endif %}
+  
+          <!-- Deal Type Badge (Top Left) -->
+          <span class="absolute top-2 left-2 px-3 py-1 text-xs font-semibold text-white rounded-md shadow-md 
+                      {% if property.deal_type == 'SELL' %} bg-red-600 dark:bg-red-400 
+                      {% elif property.deal_type == 'BUY' %} bg-green-600 dark:bg-green-400 
+                      {% elif property.deal_type == 'RENT' %} bg-blue-600 dark:bg-blue-400 
+                      {% else %} bg-gray-700 dark:bg-gray-500 {% endif %}">
+            {{ property.get_deal_type_display }}
+          </span>
+        </div>
+  
+        <!-- Property Details -->
+        <div class="p-3 text-gray-800 dark:text-gray-200">
+          <strong class="text-lg block">{{ property.title }}</strong>
+          <p class="text-sm text-gray-600 dark:text-gray-400">{{ property.state }} | {{ property.subdivision }} | {{ property.village }}</p>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">Contact: 98xxxxx</p>
+        </div>
+  
+        <!-- Listing Date (Bottom) -->
+        <p class="text-xs text-gray-600 dark:text-gray-400 text-right mt-auto p-2">
+           Listed on: {{ property.listing_date }}
+        </p>
+      </div>
+    {% empty %}
+      <p class="text-gray-700 dark:text-gray-300 text-center py-6 col-span-4">No properties available.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Pagination Controls -->
+<div class="flex justify-center mt-6">
+  <span class="step-links space-x-2">
+    {% if page_obj.has_previous %}
+      <a href="?page=1" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">First</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600">Previous</a>
+    {% endif %}
+
+    <span class="px-4 py-2 bg-gray-200 dark:bg-gray-800 rounded">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600">Next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Last</a>
+    {% endif %}
+  </span>
+</div>
+{% endblock %}

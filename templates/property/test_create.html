@@ -1,0 +1,22 @@
+<!-- property/test_create.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Property</title>
+</head>
+<body>
+    <h1>Create Property</h1>
+    <form action="{% url 'test_create_property' %}" method="get">
+        <label for="property_type">Select Property Type:</label>
+        <select name="property_type" id="property_type" required>
+            <option value="land">Land Property</option>
+            <option value="residential">Residential Property</option>
+            <option value="commercial">Commercial Property</option>
+            <option value="industrial">Industrial Property</option>
+        </select>
+        <button type="submit">Go</button>
+    </form>
+</body>
+</html>

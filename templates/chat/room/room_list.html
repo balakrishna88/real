@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="p-4 w-full max-w-3xl mx-auto">
+    <!-- Create Room Button -->
+    <div class="flex justify-left mb-4">
+        <a href="{% url 'create_room' %}" class="w-64 bg-green-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition-all duration-300 hover:bg-green-700 hover:shadow-lg text-center">
+            + Create Room 
+        </a>
+    </div>
+            
+    <!-- Minimal Chat Room Container -->
+    <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-300 dark:border-gray-700">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b pb-2">
+            Available Chat Rooms
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for room in rooms %}
+                <a href="{% url 'room_detail' room.id %}" class="block p-4 border border-gray-300 dark:border-gray-700 rounded-lg transition-transform transform hover:scale-105 hover:shadow-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        {{ room.name }}
+                    </h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ room.description }}</p>
+                </a>
+            {% empty %}
+                <p class="text-gray-600 dark:text-gray-400 text-center col-span-2">
+                    No rooms available at the moment.
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

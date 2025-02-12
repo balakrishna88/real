@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% block title %}Group Settings{% endblock %}
+{% block content %}
+<div class="m-6 p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Group Settings</h1>
+
+        <!-- Admin Groups Section -->
+        <div class="mb-8 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-white mb-4 text-center">Admin Groups</h2>
+
+            <!-- Public Admin Groups -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium text-green-700 dark:text-green-400 mb-2">Public Groups</h3>
+                {% with public_admin_groups=admin_groups|dictsort:"group_type"|default_if_none:"" %}
+                    {% if public_admin_groups %}
+                        <ul class="space-y-4">
+                            {% for group in public_admin_groups %}
+                                {% if group.group_type == 'public' %}
+                                    <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ group.name }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ group.description|default:"No description available." }}</p>
+                                        <a href="{% url 'manage_group' group.id %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            Manage Group
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-300">You are not an admin of any public groups.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Private Admin Groups -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium text-blue-700 dark:text-blue-400 mb-2">Private Groups</h3>
+                {% with private_admin_groups=admin_groups|dictsort:"group_type"|default_if_none:"" %}
+                    {% if private_admin_groups %}
+                        <ul class="space-y-4">
+                            {% for group in private_admin_groups %}
+                                {% if group.group_type == 'private' %}
+                                    <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ group.name }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ group.description|default:"No description available." }}</p>
+                                        <a href="{% url 'manage_group' group.id %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            Manage Group
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-300">You are not an admin of any private groups.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Official Admin Groups -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium text-purple-700 dark:text-purple-400 mb-2">Official Groups</h3>
+                {% with official_admin_groups=admin_groups|dictsort:"group_type"|default_if_none:"" %}
+                    {% if official_admin_groups %}
+                        <ul class="space-y-4">
+                            {% for group in official_admin_groups %}
+                                {% if group.group_type == 'official' %}
+                                    <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ group.name }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ group.description|default:"No description available." }}</p>
+                                        <a href="{% url 'manage_group' group.id %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            Manage Group
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-300">You are not an admin of any official groups.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <hr class="dark:border-gray-700">
+
+<!-- Participant Groups Section -->
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-white mb-4 text-center">Participant Groups</h2>
+
+            <!-- Public Participant Groups -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium text-green-700 dark:text-green-400 mb-2">Public Groups</h3>
+                {% with public_participant_groups=participant_groups|dictsort:"group_type"|default_if_none:"" %}
+                    {% if public_participant_groups %}
+                        <ul class="space-y-4">
+                            {% for group in public_participant_groups %}
+                                {% if group.group_type == 'public' %}
+                                    <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ group.name }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ group.description|default:"No description available." }}</p>
+                                        <a href="{% url 'group_detail' group.slug %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            View Group
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-300">You are not a participant in any public groups.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Private Participant Groups -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium text-blue-700 dark:text-blue-400 mb-2">Private Groups</h3>
+                {% with private_participant_groups=participant_groups|dictsort:"group_type"|default_if_none:"" %}
+                    {% if private_participant_groups %}
+                        <ul class="space-y-4">
+                            {% for group in private_participant_groups %}
+                                {% if group.group_type == 'private' %}
+                                    <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ group.name }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ group.description|default:"No description available." }}</p>
+                                        <a href="{% url 'group_detail' group.slug %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            View Group
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-300">You are not a participant in any private groups.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Official Participant Groups -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium text-purple-700 dark:text-purple-400 mb-2">Official Groups</h3>
+                {% with official_participant_groups=participant_groups|dictsort:"group_type"|default_if_none:"" %}
+                    {% if official_participant_groups %}
+                        <ul class="space-y-4">
+                            {% for group in official_participant_groups %}
+                                {% if group.group_type == 'official' %}
+                                    <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ group.name }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ group.description|default:"No description available." }}</p>
+                                        <a href="{% url 'group_detail' group.slug %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            View Group
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-300">You are not a participant in any official groups.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+</div>
+{% endblock %}

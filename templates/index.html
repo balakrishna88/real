@@ -1,0 +1,22 @@
+<!-- child.html -->
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="image-container" style="position: relative; text-align: center; padding: 2px;">
+    <img src="{% static 'images/header.png' %}" alt="Real Estate Header" style="width: 98%; height: auto; display: inline-block; border-radius: 15px; padding: 2px;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 46px; font-weight: bold; background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)); padding: 10px; border-radius: 5px;">
+        Find Your Perfect Property
+    </div>
+</div>
+
+
+{% include "include/search.html" %}
+{% include "include/category.html" %}
+{% include "include/post.html" %}
+
+
+
+{% endblock %}

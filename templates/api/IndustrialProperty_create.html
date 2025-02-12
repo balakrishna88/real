@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Industrial Property</title>
+</head>
+<body>
+    <h1>Create a Industrial Property Listing</h1>
+    <p>Status: {{ auth_status }}</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <label for="images">Upload Images:</label>
+        <input type="file" name="images" multiple>
+        <br>
+        <label for="documents">Upload Documents:</label>
+        <input type="file" name="documents" multiple>
+        <br>
+        <label for="videos">Upload Videos:</label>
+        <input type="file" name="videos" multiple>
+        <br><br>
+        <button type="submit">Create Listing</button>
+    </form>
+</body>
+</html>

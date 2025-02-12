@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            margin-top: 1.5rem;
+        }
+        input {
+            padding: 0.75rem;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .messages {
+            margin-bottom: 1rem;
+        }
+        .messages .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            padding: 0.75rem;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 1rem;
+        }
+        .messages .success {
+            color: #155724;
+            background-color: #d4edda;
+            padding: 0.75rem;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 1rem;
+        }
+        .resend-otp-button {
+            background-color: #007bff;
+            margin-top: 1rem;
+        }
+        .resend-otp-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verify OTP</h1>
+
+        <!-- Display messages (errors, success, etc.) -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Combined Form -->
+        <form method="post" id="otp-form">
+            {% csrf_token %}
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="{% if not email %}Enter your email{% endif %}" 
+                value="{% if email %}{{ email }}{% endif %}" 
+                required
+            >
+            <input 
+                type="text" 
+                name="otp" 
+                placeholder="Enter OTP" 
+                id="otp-input"
+            >
+            <input type="hidden" name="action" id="action" value="verify">
+            
+            <!-- Verify OTP Button -->
+            <button type="submit" id="verify-button">Verify OTP</button>
+
+            <!-- Resend OTP Button -->
+            <button type="button" id="resend-button" class="resend-otp-button">Resend OTP</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript to handle form submission for resend OTP
+        document.getElementById('resend-button').addEventListener('click', function() {
+            // Set the form action to the resend_otp URL
+            document.getElementById('otp-form').action = "{% url 'resend_otp' %}";
+            // Set the hidden input value to 'resend'
+            document.getElementById('action').value = 'resend';
+            // Clear the OTP input field
+            document.getElementById('otp-input').value = '';
+            // Submit the form
+            document.getElementById('otp-form').submit();
+        });
+
+        // JavaScript to handle form submission for verify OTP
+        document.getElementById('verify-button').addEventListener('click', function() {
+            // Set the form action to the verify_otp URL
+            document.getElementById('otp-form').action = "{% url 'verify_otp' %}";
+            // Set the hidden input value to 'verify'
+            document.getElementById('action').value = 'verify';
+        });
+    </script>
+</body>
+</html>

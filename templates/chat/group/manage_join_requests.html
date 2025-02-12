@@ -1,0 +1,70 @@
+<!-- chat/group/manage_join_requests.html -->
+{% extends 'base.html' %}
+
+{% block title %}Manage Join Requests: {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Manage Join Requests: {{ group.name }}</h1>
+
+    <!-- Join Requests List -->
+    <div>
+        {% if join_requests %}
+            <ul class="space-y-4">
+                {% for request in join_requests %}
+                    <li class="bg-gray-100 p-4 rounded-md flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold">{{ request.user.username }}</p>
+                            <p class="text-sm text-gray-600">{{ request.message|default:"No message provided." }}</p>
+                            <p class="text-xs text-gray-500">Submitted on: {{ request.timestamp|date:"M d, Y H:i" }}</p>
+                            <p class="text-sm">
+                                Status:
+                                {% if request.status == 'pending' %}
+                                    <span class="text-yellow-600 font-semibold">Pending</span>
+                                {% elif request.status == 'approved' %}
+                                    <span class="text-green-600 font-semibold">Approved</span>
+                                {% elif request.status == 'rejected' %}
+                                    <span class="text-red-600 font-semibold">Rejected</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="flex space-x-2">
+                            {% if request.status == 'pending' %}
+                                <!-- Approve Button -->
+                                <form method="post" action="{% url 'manage_join_requests' group.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                                    <button type="submit" name="action" value="approve" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
+                                        Approve
+                                    </button>
+                                </form>
+                                <!-- Reject Button -->
+                                <form method="post" action="{% url 'manage_join_requests' group.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                                    <button type="submit" name="action" value="reject" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors">
+                                        Reject
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600">No join requests available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Display Messages -->
+    {% if messages %}
+        <div class="mt-4">
+            {% for message in messages %}
+                <div class="p-3 {% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %} rounded-md">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

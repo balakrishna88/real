@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extract Coordinates</title>
+</head>
+<body>
+    <h2>Enter Google Maps URL</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="gmap_url" placeholder="Paste Google Maps URL here" required>
+        <button type="submit">Extract Coordinates</button>
+    </form>
+
+    {% if latitude and longitude %}
+        <p><strong>Latitude:</strong> {{ latitude }}</p>
+        <p><strong>Longitude:</strong> {{ longitude }}</p>
+    {% elif error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>

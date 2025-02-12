@@ -1,0 +1,575 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Modal styling */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Ensure the modal is on top */
+    }
+
+    .modal:target {
+        display: flex; /* Show modal when it's targeted */
+    }
+
+    /* Modal content styling */
+    .modal-content {
+        position: relative;
+        background-color: white;
+        padding: 40px; /* Increased padding */
+        border-radius: 15px; /* More rounded corners */
+        max-width: 90%; /* Increased width */
+        max-height: 90%; /* Increased height */
+        overflow: auto;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    }
+
+    /* Close button styling */
+    .modal a {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 18px;
+        color: white;
+        background-color: #f44336; /* Red background for close button */
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none; /* Remove underline */
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Close button hover effect */
+    .modal a:hover {
+        background-color: #d32f2f; /* Darker red on hover */
+    }
+
+    /* Modal content image */
+    .modal img {
+        width: 100%;
+        max-height: 75vh; /* Limit image height */
+        object-fit: contain;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+      <!-- Left Column - Post Content (Takes 75% on large screens) -->
+<div class="md:col-span-3 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 p-6 rounded-lg shadow-md transition duration-300">
+    
+    <h1 class="text-3xl font-bold mb-4">{{ property.title }}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-4">
+        Published on: <span class="font-semibold">July 2025</span>
+    </p>
+
+    <!-- Image Gallery -->
+    <div class="flex flex-wrap justify-center gap-4 mt-4">
+        {% for image in images %}
+            <div class="relative group p-4">
+                <!-- Thumbnail Image -->
+                <a href="#modal{{ forloop.counter }}" class="cursor-pointer">
+                    <img 
+                        src="{{ image.image.url }}" 
+                        alt="{{ image.description }}" 
+                        class="w-52 h-52 object-cover cursor-pointer rounded-lg transition-transform transform hover:scale-105">
+                </a>
+
+                <!-- Image Description Tooltip -->
+                {% if image.description %}
+                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {{ image.description }}
+                    </div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p class="col-span-full text-center text-gray-500 dark:text-gray-400">No images available for this property.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Modal for Enlarged Image -->
+    {% for image in images %}
+        <div id="modal{{ forloop.counter }}" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 hidden justify-center items-center z-50">
+            <div class="modal-content bg-white dark:bg-gray-800 p-4 rounded-lg w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 relative transition duration-300">
+                <!-- Close Button -->
+                <a href="#" class="absolute top-2 right-2 text-3xl text-white dark:text-gray-200 cursor-pointer">&times;</a>
+                <img src="{{ image.image.url }}" alt="{{ image.description }}" class="w-full h-auto rounded-lg">
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Description Section -->
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4 transition duration-300">
+        <h3 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b border-gray-300 dark:border-gray-700 pb-2 mb-4">
+            Property Description
+        </h3>
+        <p class="text-lg text-gray-700 dark:text-gray-300">
+            {{ property.description }}
+        </p>
+    </div>
+    <!-- Description Section End -->
+
+    <!-- Address Info -->
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4 transition duration-300">
+        <h3 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b border-gray-300 dark:border-gray-700 pb-2 mb-4">
+            Address Details
+        </h3>
+
+        <div class="text-gray-700 dark:text-gray-300 space-y-2">
+            <!-- Village -->
+            {% if property.village %}
+            <p class="text-lg flex items-center">
+                <i class="fas fa-home mr-2 text-gray-500 dark:text-gray-400"></i>
+                <strong class="text-gray-600 dark:text-gray-400">Village:</strong>
+                <span class="ml-2 text-gray-800 dark:text-gray-200">{{ property.village }}</span>
+            </p>
+            {% endif %}
+
+            <!-- Subdistrict -->
+            {% if property.subdistrict %}
+            <p class="text-lg flex items-center">
+                <i class="fas fa-map-signs mr-2 text-gray-500 dark:text-gray-400"></i>
+                <strong class="text-gray-600 dark:text-gray-400">Subdistrict:</strong>
+                <span class="ml-2 text-gray-800 dark:text-gray-200">{{ property.subdistrict }}</span>
+            </p>
+            {% endif %}
+
+            <!-- District, State, and Pincode -->
+            {% if property.district or property.state or property.pincode %}
+            <p class="text-lg flex items-center">
+                <i class="fas fa-map-marker-alt mr-2 text-gray-500 dark:text-gray-400"></i>
+                <strong class="text-gray-600 dark:text-gray-400">Location:</strong>
+                <span class="ml-2 text-gray-800 dark:text-gray-200">
+                    {{ property.district }}{% if property.district and property.state %}, {% endif %}
+                    {{ property.state }}{% if property.state and property.pincode %} - {% endif %}
+                    {{ property.pincode }}
+                </span>
+            </p>
+            {% endif %}
+
+            <!-- Google Maps Location -->
+            {% if property.location %}
+            <p class="text-lg flex items-center">
+                <i class="fas fa-map mr-2 text-gray-500 dark:text-gray-400"></i>
+                <strong class="text-gray-600 dark:text-gray-400">Map:</strong>
+                <a href="{{ property.location }}" target="_blank" class="ml-2 text-blue-600 dark:text-blue-400 hover:underline">
+                    View on Google Maps
+                </a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Address Info End -->
+
+    <!-- Additional Info -->
+    <div class="container mx-auto">
+        <div class="">
+    <!-- Land Property Details -->
+          {% if property.landproperty %}
+            <!-- Property Details -->
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+              <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b pb-2 mb-4">Land Property</h2>
+      
+              <div class="grid grid-cols-2 gap-4">
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Property Type:</strong>
+                  <span class="text-gray-800 dark:text-white">{{ property.landproperty.property_type }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Total Area:</strong>
+                  <span class="text-gray-800 dark:text-white">{{ property.landproperty.total_area }} {{ property.landproperty.area_unit }}</span>
+                </p>
+                <p class="text-lg col-span-2"><strong class="text-gray-600 dark:text-gray-400">Price:</strong>
+                  <span class="text-green-600 dark:text-green-400 font-semibold">${{ property.landproperty.price }}</span>
+                </p>
+              </div>
+            </div>
+      
+            <!-- Nearby Information -->
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+              <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b pb-2 mb-4">Nearby Information</h2>
+      
+              <div class="grid grid-cols-2 gap-4">
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Nearby Amenities:</strong>
+                  <span class="text-green-600 dark:text-green-400 font-semibold">{{ property.landproperty.nearby_amenities }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Nearby:</strong>
+                  <span class="text-green-600 dark:text-green-400 font-semibold">{{ property.landproperty.nearby }}</span>
+                </p>
+                <p class="text-lg col-span-2"><strong class="text-gray-600 dark:text-gray-400">Nearest Road:</strong>
+                  <span class="text-green-600 dark:text-green-400 font-semibold">{{ property.landproperty.distance_from_road }}</span>
+                </p>
+              </div>
+            </div>
+      
+            <!-- Property Features -->
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+              <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b pb-2 mb-4">Property Features</h2>
+      
+              <div class="grid grid-cols-2 gap-4">
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Water Availability:</strong>
+                  <span class="{% if property.landproperty.has_water %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.landproperty.has_water %} Yes {% else %} No {% endif %}
+                  </span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Electricity Availability:</strong>
+                  <span class="{% if property.landproperty.has_electricity %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.landproperty.has_electricity %} Yes {% else %} No {% endif %}
+                  </span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Corner Plot:</strong>
+                  <span class="{% if property.landproperty.is_corner_plot %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.landproperty.is_corner_plot %} Yes {% else %} No {% endif %}
+                  </span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Soil Type:</strong>
+                  <span class="text-gray-800 dark:text-white">{{ property.landproperty.soil_type }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Irrigation Facilities:</strong>
+                  <span class="{% if property.landproperty.irrigation_facilities %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.landproperty.irrigation_facilities %} Yes {% else %} No {% endif %}
+                  </span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Facing:</strong>
+                  <span class="text-gray-800 dark:text-white">{{ property.landproperty.facing }}</span>
+                </p>
+              </div>
+            </div>
+    
+    <!-- Land Property Details End -->
+
+    <!-- Residential Property Details -->
+    {% elif property.residentialproperty %}
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+        <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b pb-2 mb-4">Land Property</h2>
+
+        <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Property Type:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.property_type }}</span>
+            </p>
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Total Area:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.built_up_area }} {{ property.residentialproperty.area_unit }}</span>
+            </p>
+            <p class="text-lg col-span-2"><strong class="text-gray-600 dark:text-gray-400">Price:</strong> 
+                <span class="text-green-600 dark:text-green-400 font-semibold">${{ property.residentialproperty.price }}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Nearby Information -->
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+        <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b pb-2 mb-4">Nearby Information</h2>
+
+        <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Nearby Amenities:</strong> 
+                <span class="text-green-600 dark:text-green-400 font-semibold">{{ property.residentialproperty.nearby_amenities }}</span>
+            </p>
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Nearby:</strong> 
+                <span class="text-green-600 dark:text-green-400 font-semibold">{{ property.residentialproperty.nearby }}</span>
+            </p>
+            <p class="text-lg col-span-2"><strong class="text-gray-600 dark:text-gray-400">Nearest Road:</strong> 
+                <span class="text-green-600 dark:text-green-400 font-semibold">{{ property.residentialproperty.distance_from_road }}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Property Features -->
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+        <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 border-b pb-2 mb-4">Property Features</h2>
+
+        <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Bedrooms:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.bedrooms }}</span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Bathrooms:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.bathrooms }}</span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Furnishing Status:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.furnishing_status }}</span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Parking:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.parking }}</span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Floor Number:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.floor_number }}</span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Balconies:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.balcony_count }}</span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Garden:</strong> 
+                <span class="{% if property.residentialproperty.has_garden %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.residentialproperty.has_garden %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Security:</strong> 
+                <span class="{% if property.residentialproperty.has_security %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.residentialproperty.has_security %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Swimming Pool:</strong> 
+                <span class="{% if property.residentialproperty.has_pool %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                    {% if property.residentialproperty.has_pool %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+
+            <p class="text-lg"><strong class="text-gray-600 dark:text-gray-400">Year Built:</strong> 
+                <span class="text-gray-800 dark:text-gray-300">{{ property.residentialproperty.year_built }}</span>
+            </p>
+        </div>
+    </div>
+    <!-- Residential Property Details End -->
+
+    <!-- Commercial Property Details  -->
+
+    {% elif property.commercialproperty %}
+    
+    <!-- Property Details -->
+      <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+          <h2 class="text-xl font-semibold text-green-700 border-b pb-2 mb-4">Commercial Property</h2>
+  
+          <div class="grid grid-cols-2 gap-4">
+              <p class="text-lg"><strong class="text-gray-600">Property Type:</strong> 
+                  <span class="text-gray-800">{{ property.commercialproperty.property_type }}</span>
+              </p>
+              <p class="text-lg"><strong class="text-gray-600">Total Area:</strong> 
+                  <span class="text-gray-800">{{ property.commercialproperty.area }} {{ property.commercialproperty.area_unit }}</span>
+              </p>
+              <p class="text-lg col-span-2"><strong class="text-gray-600">Price:</strong> 
+                  <span class="text-green-600 font-semibold">${{ property.commercialproperty.price }}</span>
+              </p>
+          </div>
+      </div>
+
+      <!-- Nearby Information -->
+      <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+          <h2 class="text-xl font-semibold text-green-700 border-b pb-2 mb-4">Nearby Information</h2>
+  
+          <div class="grid grid-cols-2 gap-4">
+              <p class="text-lg"><strong class="text-gray-600">Nearby Amenities:</strong> 
+                  <span class="text-green-600 font-semibold">{{ property.commercialproperty.nearby_amenities }}</span>
+              </p>
+              <p class="text-lg"><strong class="text-gray-600">Nearby:</strong> 
+                  <span class="text-green-600 font-semibold">{{ property.commercialproperty.nearby }}</span>
+              </p>
+              <p class="text-lg col-span-2"><strong class="text-gray-600">Nearest Road:</strong> 
+                  <span class="text-green-600 font-semibold">{{ property.commercialproperty.distance_from_road }}</span>
+              </p>
+          </div>
+      </div>
+
+      <!-- Property Features -->
+      <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+          <h2 class="text-xl font-semibold text-green-700 border-b pb-2 mb-4">Property Features</h2>
+
+          <div class="grid grid-cols-2 gap-4">
+
+            <p class="text-lg">
+              <strong class="text-gray-600">Furnishing Status:</strong> 
+              <span class="text-gray-800">{{ property.commercialproperty.furnishing_status }}</span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Parking:</strong> 
+              <span class="text-gray-800">{{ property.commercialproperty.parking }}</span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Year Built:</strong> 
+              <span class="text-gray-800">{{ property.commercialproperty.year_built }}</span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Total Floors:</strong> 
+              <span class="text-gray-800">{{ property.commercialproperty.total_floors }}</span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Floor Number:</strong> 
+              <span class="text-gray-800">{{ property.commercialproperty.floor_number }}</span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Air Conditioning:</strong> 
+              <span class="{% if property.commercialproperty.has_air_conditioning %}text-green-600{% else %}text-red-600{% endif %}">
+                  {% if property.commercialproperty.has_air_conditioning %} Yes {% else %} No {% endif %}
+              </span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Elevator:</strong> 
+              <span class="{% if property.commercialproperty.has_elevator %}text-green-600{% else %}text-red-600{% endif %}">
+                  {% if property.commercialproperty.has_elevator %} Yes {% else %} No {% endif %}
+              </span>
+          </p>
+          
+          <p class="text-lg">
+              <strong class="text-gray-600">Renovated:</strong> 
+              <span class="{% if property.commercialproperty.is_renovated %}text-green-600{% else %}text-red-600{% endif %}">
+                  {% if property.commercialproperty.is_renovated %} Yes {% else %} No {% endif %}
+              </span>
+          </p>
+
+          <p class="text-lg">
+            <strong class="text-gray-600">Security:</strong> 
+            <span class="{% if property.commercialproperty.has_security %}text-green-600{% else %}text-red-600{% endif %}">
+                {% if property.commercialproperty.has_security %} Yes {% else %} No {% endif %}
+            </span>
+          </p>
+
+          <p class="text-lg">
+            <strong class="text-gray-600">Power Backup:</strong> 
+            <span class="{% if property.commercialproperty.power_backup %}text-green-600{% else %}text-red-600{% endif %}">
+                {% if property.commercialproperty.power_backup %} Yes {% else %} No {% endif %}
+            </span>
+          </p>
+          
+          
+          </div>
+      </div>
+    <!-- Commercial Property Details End -->
+
+    <!-- Industrial Property Details -->
+
+    {% elif property.industrialproperty %}
+        <!-- Property Details -->
+        <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+            <h2 class="text-xl font-semibold text-green-700 border-b pb-2 mb-4">Industrial Property</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <p class="text-lg"><strong class="text-gray-600">Property Type:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.property_type }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Total Area:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.area }} {{ property.industrialproperty.area_unit }}</span>
+                </p>
+                <p class="text-lg col-span-2"><strong class="text-gray-600">Price:</strong> 
+                    <span class="text-green-600 font-semibold">${{ property.industrialproperty.price }}</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Nearby Information -->
+        <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+            <h2 class="text-xl font-semibold text-green-700 border-b pb-2 mb-4">Nearby Information</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <p class="text-lg"><strong class="text-gray-600">Nearby Amenities:</strong> 
+                    <span class="text-green-600 font-semibold">{{ property.industrialproperty.nearby_amenities }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Nearby:</strong> 
+                    <span class="text-green-600 font-semibold">{{ property.industrialproperty.nearby }}</span>
+                </p>
+                <p class="text-lg col-span-2"><strong class="text-gray-600">Nearest Road:</strong> 
+                    <span class="text-green-600 font-semibold">{{ property.industrialproperty.distance_from_road }}</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Property Features -->
+        <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+            <h2 class="text-xl font-semibold text-green-700 border-b pb-2 mb-4">Property Features</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <p class="text-lg"><strong class="text-gray-600">Furnishing Status:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.furnishing_status }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Parking:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.parking }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Year Built:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.year_built }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Total Floors:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.total_floors }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Floor Number:</strong> 
+                    <span class="text-gray-800">{{ property.industrialproperty.floor_number }}</span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Air Conditioning:</strong> 
+                    <span class="{% if property.industrialproperty.has_air_conditioning %}text-green-600{% else %}text-red-600{% endif %}">
+                        {% if property.industrialproperty.has_air_conditioning %} Yes {% else %} No {% endif %}
+                    </span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Elevator:</strong> 
+                    <span class="{% if property.industrialproperty.has_elevator %}text-green-600{% else %}text-red-600{% endif %}">
+                        {% if property.industrialproperty.has_elevator %} Yes {% else %} No {% endif %}
+                    </span>
+                </p>
+                <p class="text-lg"><strong class="text-gray-600">Renovated:</strong> 
+                    <span class="{% if property.industrialproperty.is_renovated %}text-green-600{% else %}text-red-600{% endif %}">
+                        {% if property.industrialproperty.is_renovated %} Yes {% else %} No {% endif %}
+                    </span>
+                </p>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-4 border border-gray-300 dark:border-gray-700 mt-4">
+            <h2 class="text-2xl font-semibold text-gray-700">Unknown Property Type</h2>
+            <p class="text-gray-600 mt-2">No specific property type found. Please check the details.</p>
+        </div>
+    {% endif %}
+    </div>
+</div>
+
+<!-- Additional Info -->
+
+
+</div><!-- Left Column end -->
+
+      <!-- Right Column - Sidebar (Takes 25% on large screens) -->
+      <div class="md:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-300 dark:border-gray-700">
+  
+        <iframe src="https://www.google.com/maps?q={{ property.latitude|safe }},{{ property.longitude|safe }}&output=embed" 
+          width="300" height="450" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      
+        <br>
+      
+        <a href="{{ property.location }}" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 flex items-center space-x-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-500 dark:text-red-400" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" 
+                    d="M12 2C8.13 2 5 5.13 5 9c0 4.87 7 13 7 13s7-8.13 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" 
+                    clip-rule="evenodd"/>
+          </svg>
+          <span>View on Map</span>
+        </a>
+      
+        <!-- Nearby Properties Link -->
+        <a href="#nearby" class="text-blue-600 hover:text-blue-800 dark:text-blue-400">
+            🔍 Nearby Properties
+        </a>
+      
+      </div>
+      
+      <!-- Right Column end -->
+
+  </div>
+</div>
+
+
+{% include 'property/action.html' %}
+
+{% include 'property/comment.html' %}
+
+{% include 'property/recommended.html' %}
+
+<div id="nearby" class="mt-6">
+    {% include 'property/nearby.html' %}
+</div>
+
+
+{% endblock %}
