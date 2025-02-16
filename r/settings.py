@@ -28,6 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Add your Render domain to the list of trusted origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://real-o3mm.onrender.com',
+    # Add other domains if needed (e.g., custom domains)
+]
+
 
 # Application definition
 
