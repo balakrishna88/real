@@ -161,7 +161,7 @@ def login(request):
                     # Log the user in
                     auth_login(request, authenticated_user)
                     messages.success(request, 'You have been logged in successfully.')
-                    return redirect('dashboard')  # Redirect to the dashboard
+                    return redirect('home')  # Redirect to the dashboard
                 else:
                     # Password is incorrect
                     messages.error(request, 'Invalid password.')
