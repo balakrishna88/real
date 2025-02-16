@@ -233,8 +233,16 @@
                 {% endif %}
 
                 <!-- Request Mobile Number Button -->
-                <button onclick="document.getElementById('requestModal').classList.remove('hidden')" 
-                        class="btn btn-primary btn-wide">📞 Contact Owner</button>
+                {% if user.is_authenticated %}
+                  <button onclick="document.getElementById('requestModal').classList.remove('hidden')" 
+                        class="btn btn-primary btn-wide">📞 Contact Owner
+                  </button>
+                {% else %}
+                  <a href="{% url 'login' %}" class="btn btn-secondary btn-wide">
+                    🔓 Login to Contact Owner
+                  </a>
+                {% endif %}
+                <!-- Request Mobile Number Button -->
               </div>
             </div>
           </div>
