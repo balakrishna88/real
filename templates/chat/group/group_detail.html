@@ -128,37 +128,28 @@
 
         <!-- Input Container -->
         <!-- Input Container -->
-<footer class="bg-white border-t p-4 flex items-center space-x-2">
-    <!-- Message Input -->
-    <input
-      type="text"
-      id="message-input"
-      placeholder="Type a message..."
-      class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-  
-    <!-- Hidden File Input -->
-    <input type="file" id="file-input" class="hidden" />
-  
-    <!-- Attach Button -->
-    <button
-      id="attach-button"
-      class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-200"
-    >
-      Attach
-    </button>
-  
-    <!-- File Name Display -->
-    <span id="file-name-display" class="text-sm text-gray-600"></span>
-  
-    <!-- Send Button -->
-    <button
-      id="send-button"
-      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-    >
-      Send
-    </button>
-  </footer>
+<footer class="bg-white border-t p-4 flex items-center space-x-2 w-full sticky bottom-0">
+
+            <input
+                type="text"
+                id="message-input"
+                placeholder="Type a message..."
+                class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            />
+            <input type="file" id="file-input" class="hidden" />
+            <button
+                id="attach-button"
+                class="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-200 whitespace-nowrap"
+            >
+                Attach
+            </button>
+            <button
+                id="send-button"
+                class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 whitespace-nowrap"
+            >
+                Send
+            </button>
+        </footer>
     </div>
 
     <script>
