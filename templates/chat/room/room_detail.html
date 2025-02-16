@@ -70,7 +70,7 @@
 
         // Establish WebSocket connection
         const chatSocket = new WebSocket(
-            `ws://${window.location.host}/ws/chat/${roomId}/`
+            `wss://${window.location.host}/ws/chat/${roomId}/`
         );
 
         chatSocket.onmessage = function (e) {
