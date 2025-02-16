@@ -1,22 +1,30 @@
-<!-- child.html -->
-
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-
-
-<div class="image-container" style="position: relative; text-align: center; padding: 2px;">
-    <img src="{% static 'images/header.png' %}" alt="Real Estate Header" style="width: 98%; height: auto; display: inline-block; border-radius: 15px; padding: 2px;">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 46px; font-weight: bold; background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)); padding: 10px; border-radius: 5px;">
-        Find Your Perfect Property
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">  <!-- ✅ Apply theme to HTML -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Site</title>
+    {% load tailwind_tags %}
+    {% tailwind_css %}
+</head>
+<body class="min-h-screen flex flex-col bg-base-100">
 
 
-{% include "include/search.html" %}
-{% include "include/category.html" %}
-{% include "include/post.html" %}
+{% include 'include/hero.html' %}
 
+{% include 'include/post.html' %}
 
+<script>
+    // Load saved theme from localStorage
+    document.addEventListener("DOMContentLoaded", function () {
+        const savedTheme = localStorage.getItem("theme") || "light";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+    });
 
-{% endblock %}
+    function changeTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+    }
+</script>
+</body>
+</html>

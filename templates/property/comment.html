@@ -1,67 +1,59 @@
-<div class="m-4 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Comments:</h2>
-
+<div class="m-4 bg-base-100 p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-semibold text-base-content mb-4">Comments:</h2>
     <ul id="parent-comments" class="space-y-4">
         {% for comment in comments %}
-            <li class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md parent-comment {% if forloop.counter > 5 %} hidden {% endif %}">
-                <strong class="text-gray-800 dark:text-white">{{ comment.user }}</strong>: 
-                <span class="text-gray-700 dark:text-gray-300">{{ comment.content }}</span>
+            <li class="bg-base-200 p-4 rounded-lg shadow-md parent-comment {% if forloop.counter > 5 %} hidden {% endif %}">
+                <strong class="text-base-content">{{ comment.user }}</strong>: 
+                <span class="text-base-content/80">{{ comment.content }}</span>
                 <br>
-                <em class="text-gray-500 dark:text-gray-400 text-sm">{{ comment.created_at }}</em>
-
+                <em class="text-base-content/60 text-sm">{{ comment.created_at }}</em>
                 {% if request.user.username == comment.user or request.user == comment.property.author %}
                     <form action="{% url 'delete_property_comment' comment.id %}" method="post" class="inline-block mt-2">
                         {% csrf_token %}
-                        <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm">Delete</button>
+                        <button type="submit" class="text-error hover:text-error-content text-sm">Delete</button>
                     </form>
                 {% endif %}
-
-                <button onclick="toggleReplyBox('reply-box-{{ comment.id }}')" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm ml-3">Reply</button>
-
+                <button onclick="toggleReplyBox('reply-box-{{ comment.id }}')" class="text-primary hover:text-primary-focus text-sm ml-3">Reply</button>
                 <div id="reply-box-{{ comment.id }}" class="hidden mt-3">
                     <form action="{% url 'property_comment_reply' property.id comment.id %}" method="post">
                         {% csrf_token %}
-                        <textarea name="content" required class="w-full border border-gray-300 dark:border-gray-500 p-2 rounded-md dark:bg-gray-600 dark:text-white"></textarea>
-                        <button type="submit" class="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-700 dark:hover:bg-blue-400">Submit Reply</button>
+                        <textarea name="content" required class="w-full textarea textarea-bordered bg-base-200 text-base-content"></textarea>
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Submit Reply</button>
                     </form>
                 </div>
-
+                
                 {% if comment.replies.all %}
                     <ul class="ml-6 mt-2 space-y-3">
                         {% for reply in comment.replies.all %}
-                            <li class="bg-gray-200 dark:bg-gray-600 p-3 rounded-md reply {% if forloop.counter > 2 %} hidden {% endif %}">
-                                <strong class="text-gray-800 dark:text-white">{{ reply.user }}</strong>: 
-                                <span class="text-gray-700 dark:text-gray-300">{{ reply.content }}</span>
+                            <li class="bg-base-300 p-3 rounded-md reply {% if forloop.counter > 2 %} hidden {% endif %}">
+                                <strong class="text-base-content">{{ reply.user }}</strong>: 
+                                <span class="text-base-content/80">{{ reply.content }}</span>
                                 <br>
-                                <em class="text-gray-500 dark:text-gray-400 text-sm">{{ reply.created_at }}</em>
-
+                                <em class="text-base-content/60 text-sm">{{ reply.created_at }}</em>
                                 {% if request.user.username == reply.user or request.user == reply.property.author %}
                                     <form action="{% url 'delete_property_comment' reply.id %}" method="post" class="inline-block mt-2">
                                         {% csrf_token %}
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm">Delete</button>
+                                        <button type="submit" class="text-error hover:text-error-content text-sm">Delete</button>
                                     </form>
                                 {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
-
                     {% if comment.replies.count > 2 %}
-                        <button onclick="showMoreReplies(this)" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm mt-2">Read More Replies</button>
+                        <button onclick="showMoreReplies(this)" class="btn btn-link btn-sm text-primary hover:text-primary-focus">Read More Replies</button>
                     {% endif %}
                 {% endif %}
             </li>
         {% endfor %}
     </ul>
-
     {% if comments|length > 5 %}
-        <button id="read-more-comments" onclick="showMoreComments()" class="bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white px-4 py-2 rounded-lg mt-4 hover:bg-gray-400 dark:hover:bg-gray-500">Read More Comments</button>
+        <button id="read-more-comments" onclick="showMoreComments()" class="btn btn-outline btn-secondary mt-4">Read More Comments</button>
     {% endif %}
-
-    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mt-6 mb-3">Add a Comment:</h3>
+    <h3 class="text-xl font-semibold text-base-content mt-6 mb-3">Add a Comment:</h3>
     <form action="{% url 'property_comment' property.id %}" method="post">
         {% csrf_token %}
-        <textarea name="content" required class="w-full border border-gray-300 dark:border-gray-500 p-2 rounded-md dark:bg-gray-600 dark:text-white"></textarea>
-        <button type="submit" class="bg-green-600 dark:bg-green-500 text-white px-4 py-2 rounded-lg mt-2 hover:bg-green-700 dark:hover:bg-green-400">Submit Comment</button>
+        <textarea name="content" required class="w-full textarea textarea-bordered bg-base-200 text-base-content"></textarea>
+        <button type="submit" class="btn btn-success btn-sm mt-2">Submit Comment</button>
     </form>
 </div>
 
@@ -70,7 +62,6 @@
         var replyBox = document.getElementById(id);
         replyBox.classList.toggle("hidden");
     }
-
     function showMoreComments() {
         let hiddenComments = document.querySelectorAll(".parent-comment.hidden");
         let counter = 0;
@@ -80,12 +71,10 @@
                 counter++;
             }
         });
-
         if (document.querySelectorAll(".parent-comment.hidden").length === 0) {
             document.getElementById("read-more-comments").style.display = "none";
         }
     }
-
     function showMoreReplies(button) {
         let replies = button.previousElementSibling.querySelectorAll(".reply.hidden");
         let counter = 0;
@@ -95,7 +84,6 @@
                 counter++;
             }
         });
-
         if (button.previousElementSibling.querySelectorAll(".reply.hidden").length === 0) {
             button.style.display = "none";
         }

@@ -1,0 +1,167 @@
+<!-- Hero Section -->
+<section class="relative w-full min-h-screen flex items-center justify-center bg-base-200 overflow-hidden">
+
+    <!-- Navbar (Keep Existing) -->
+    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-7xl z-20">
+        {% include 'include/navbar.html' %}
+    </div>
+
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-10 left-10 w-32 h-32 bg-primary opacity-20 blur-3xl rounded-full animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-48 h-48 bg-secondary opacity-20 blur-3xl rounded-full animate-pulse"></div>
+    </div>
+
+    <!-- Main Hero Content -->
+    <div class="relative z-10 max-w-6xl w-full flex flex-col lg:flex-row items-center justify-between space-y-10 lg:space-y-0 px-6 md:px-10">
+
+        <!-- Left Section: Text + Buttons -->
+        <div class="w-full lg:w-1/2 text-base-content space-y-6 text-center lg:text-left">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Find Your <span class="text-primary">Dream Home</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-500">
+                The future of real estate is here. Discover homes that match your lifestyle.
+            </p>
+
+            <!-- search -->
+            <div class="flex bg-base-100 p-3 rounded-lg shadow-lg border border-base-300 w-full max-w-lg mx-auto lg:mx-0">
+                <form method="GET" action="{% url 'mysearch' %}">
+                    <select class="select select-bordered bg-transparent focus:outline-none w-24 sm:w-28 md:w-32">
+                        <!-- <option>🏙️ City</option>
+                        <option>📍 Zip Code</option> -->
+                        <option>🏠 Property Type</option>
+                    </select>
+                    <input type="text" name="search_query" placeholder="Enter search..." 
+                        class="input input-bordered w-full sm:w-48 md:w-64 bg-transparent focus:outline-none mx-2" required>
+                
+                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-lg hover:scale-105 transition-all duration-300">
+                        🔍
+                    </button>
+                </form>
+                
+            </div>
+
+            
+            
+
+            
+            <!-- search -->
+            
+            
+
+            <!-- CTA Buttons -->
+            <div class="mt-6 flex justify-center lg:justify-start space-x-4">
+                <a href="{% url 'property_list' %}" class="btn btn-primary">View Listings</a>
+            </div>
+        </div>
+
+        <!-- Right Section: Floating Property Cards (2x2 Grid) -->
+        <div class="w-full lg:w-1/2 grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-3 place-items-center relative">
+    
+            <!-- Land -->
+            <a href="{% url 'property_list' property_type='land' %}">
+            <div class="w-44 h-32 sm:w-40 sm:h-28 lg:w-64 lg:h-48 bg-base-100 shadow-lg border border-base-300 rounded-lg p-4 
+                flex flex-col justify-center items-center gap-2 
+                transition-all duration-500 hover:scale-105 hover:shadow-xl relative overflow-hidden 
+                before:absolute before:inset-0 before:bg-gradient-to-br before:from-transparent before:to-green-400/20 before:opacity-0 hover:before:opacity-100 animate-float">
+                <i class="ri-earth-line text-green-500 text-3xl sm:text-2xl lg:text-5xl drop-shadow-md"></i>
+                <p class="text-base-content font-bold text-xs sm:text-[10px] lg:text-sm text-center">🌿 Land Property</p>
+                <p class="text-gray-500 text-xs sm:text-[9px] lg:text-sm text-center">Farmland | Development Plots</p>
+            </div>
+            </a>
+
+            <!-- Residential -->
+            <a href="{% url 'property_list' property_type='residential' %}">
+            <div class="w-44 h-32 sm:w-40 sm:h-28 lg:w-64 lg:h-48 bg-base-100 shadow-lg border border-base-300 rounded-lg p-4 
+                flex flex-col justify-center items-center gap-2 
+                transition-all duration-500 hover:scale-105 hover:shadow-xl relative overflow-hidden 
+                before:absolute before:inset-0 before:bg-gradient-to-br before:from-transparent before:to-blue-400/20 before:opacity-0 hover:before:opacity-100 animate-float delay-200">
+                <i class="ri-home-4-line text-blue-500 text-3xl sm:text-2xl lg:text-5xl drop-shadow-md"></i>
+                <p class="text-base-content font-bold text-xs sm:text-[10px] lg:text-sm text-center">🏡 Residential Property</p>
+                <p class="text-gray-500 text-xs sm:text-[9px] lg:text-sm text-center">Apartments | Villas | Houses</p>
+            </div>
+            </a>
+
+            <!-- Commercial -->
+            <a href="{% url 'property_list' property_type='commercial' %}">
+            <div class="w-44 h-32 sm:w-40 sm:h-28 lg:w-64 lg:h-48 bg-base-100 shadow-lg border border-base-300 rounded-lg p-4 
+                flex flex-col justify-center items-center gap-2 
+                transition-all duration-500 hover:scale-105 hover:shadow-xl relative overflow-hidden 
+                before:absolute before:inset-0 before:bg-gradient-to-br before:from-transparent before:to-yellow-400/20 before:opacity-0 hover:before:opacity-100 animate-float delay-400">
+                <i class="ri-building-line text-yellow-500 text-3xl sm:text-2xl lg:text-5xl drop-shadow-md"></i>
+                <p class="text-base-content font-bold text-xs sm:text-[10px] lg:text-sm text-center">🏙️ Commercial Property</p>
+                <p class="text-gray-500 text-xs sm:text-[9px] lg:text-sm text-center">Offices | Shops | Retail Spaces</p>
+            </div>
+            </a>
+
+            <!-- Industrial -->
+            <a href="{% url 'property_list' property_type='industrial' %}">
+            <div class="w-44 h-32 sm:w-40 sm:h-28 lg:w-64 lg:h-48 bg-base-100 shadow-lg border border-base-300 rounded-lg p-4 
+                flex flex-col justify-center items-center gap-2 
+                transition-all duration-500 hover:scale-105 hover:shadow-xl relative overflow-hidden 
+                before:absolute before:inset-0 before:bg-gradient-to-br before:from-transparent before:to-red-400/20 before:opacity-0 hover:before:opacity-100 animate-float delay-600">
+                <i class="ri-building-fill text-red-500 text-3xl sm:text-2xl lg:text-5xl drop-shadow-md"></i>
+                <p class="text-base-content font-bold text-xs sm:text-[10px] lg:text-sm text-center">🏭 Industrial Property</p>
+                <p class="text-gray-500 text-xs sm:text-[9px] lg:text-sm text-center">Warehouses | Factories</p>
+            </div>
+            </a>
+</div>
+
+
+
+
+</div>
+
+
+
+
+    </div>
+</section>
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+<!-- Custom Styles -->
+<style>
+/* Enhanced CTA Button Hover Effects */
+.btn-primary {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.btn-outline {
+    transition: transform 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline:hover {
+    transform: scale(1.05);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Enhanced Floating Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite alternate;
+}
+
+/* Add subtle fade-in for hero section */
+.animate-fadeIn {
+    animation: fadeIn 1s ease-out forwards, slideUp 1.2s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+</style>

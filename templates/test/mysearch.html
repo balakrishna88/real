@@ -79,21 +79,36 @@
 
   <!-- 📌 Display Search Results -->
   {% if properties %}
-    <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
-      <h3 class="text-lg font-medium text-gray-800 dark:text-white">Results:</h3>
-      <ul class="mt-2 list-disc pl-6">
-        {% for property in properties %}
-          <li class="py-2">
-            <span class="font-semibold text-indigo-600 dark:text-indigo-400">{{ property.title }}</span> 
-            - {{ property.village }}, {{ property.subdivision }}, {{ property.district }}, {{ property.state }} 
-            ({{ property.get_deal_type_display }})
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% else %}
-    <p class="text-red-500 text-lg">No properties found.</p>
-  {% endif %}
+  <div class="mb-4 p-4 bg-base-200 rounded-lg shadow">
+    <h3 class="text-lg font-semibold text-base-content">Search Results:</h3>
+    <ul class="mt-4 space-y-3">
+      {% for property in properties %}
+        <li class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-base-100 rounded-lg shadow-sm hover:bg-base-300 transition-colors">
+          <!-- Property Details -->
+          <div class="flex-1">
+            <a href="{% url 'property_detail' property.slug %}" class="font-bold text-primary hover:underline">
+              {{ property.title }}
+            </a>
+            <p class="text-sm text-base-content/80 mt-1">
+              {{ property.village }}, {{ property.subdivision }}, {{ property.district }}, {{ property.state }}
+            </p>
+            <p class="text-xs text-base-content/60 mt-1">
+              Deal Type: {{ property.get_deal_type_display }}
+            </p>
+          </div>
+          <!-- Action Button -->
+          <a href="{% url 'property_detail' property.slug %}" class="btn btn-sm btn-primary mt-3 sm:mt-0">
+            View Details
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <div class="p-4 bg-base-200 rounded-lg shadow text-center">
+    <p class="text-lg font-medium text-error">No properties found.</p>
+  </div>
+{% endif %}
 
   <!-- 🔄 Reset Button -->
   <a href="{% url 'mysearch' %}" class="mt-4 block text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">

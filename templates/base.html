@@ -1,21 +1,30 @@
-<!-- base.html -->
-{% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">  <!-- ✅ Apply theme to HTML -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base Template</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+    <title>My Site</title>
+    {% load tailwind_tags %}
     {% tailwind_css %}
 </head>
-<body class="min-h-screen bg-gray-200 text-gray-800 dark:bg-gray-900 dark:text-white">
-    <main class="bg-gray-200 text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-300 -mt-4">
-        {% include "include/navibar.html" %}
-    {% block content %}
-    
-    {% endblock %}
-    </main>     
+<body class="min-h-screen flex flex-col bg-base-100">
+
+    {% include 'include/navbar.html' %}
+
+        {% block content %}{% endblock %}
+
+
+    <script>
+        // Load saved theme from localStorage
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+        });
+
+        function changeTheme(theme) {
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+        }
+    </script>
 </body>
 </html>

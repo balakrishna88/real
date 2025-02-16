@@ -1,90 +1,101 @@
-
+{% extends 'base.html' %}
 
 {% block content %}
-  <h1>Edit Property</h1>
-  <form method="POST" enctype="multipart/form-data">
+<div class="container mx-auto p-6">
+  
+  <!-- Page Title -->
+  <h1 class="text-3xl font-bold text-primary mb-6">Edit Property</h1>
+  
+  <form method="POST" enctype="multipart/form-data" class="bg-base-100 shadow-lg p-6 rounded-lg border border-base-300">
     {% csrf_token %}
-    
+
     <!-- Property Form -->
-    <h2>Property Information</h2>
-    {{ property_form.as_p }}
-    
+    <h2 class="text-2xl font-semibold text-secondary mb-4">🏠 Property Information</h2>
+    <div class="space-y-3">
+      {{ property_form.as_p }}
+    </div>
+
     <!-- Image Upload Form -->
-    <h2>Images</h2>
-    <div class="form-group">
-        <label for="id_images">Upload Images</label>
-        <input type="file" name="images" id="id_images" multiple class="form-control-file">
+    <h2 class="text-2xl font-semibold text-secondary mt-6">📷 Upload Images</h2>
+    <div class="form-control">
+      <label for="id_images" class="label">Upload Images</label>
+      <input type="file" name="images" id="id_images" multiple class="file-input file-input-bordered w-full">
     </div>
 
-    <!-- Documents -->
-    <h3>Documents</h3>
-    <div class="form-group">
-        <label for="id_documents">Upload Documents</label>
-        <input type="file" name="documents" id="id_documents" multiple class="form-control-file">
-    </div>
-
-    <!-- Videos -->
-    <h3>Videos</h3>
-    <div class="form-group">
-        <label for="id_videos">Upload Videos</label>
-        <input type="file" name="videos" id="id_videos" multiple class="form-control-file">
-    </div>
-    
     <!-- Document Upload Form -->
-    <h2>Documents</h2>
-    {{ document_form.as_p }}
-    
+    <h2 class="text-2xl font-semibold text-secondary mt-6">📄 Upload Documents</h2>
+    <div class="form-control">
+      <label for="id_documents" class="label">Upload Documents</label>
+      <input type="file" name="documents" id="id_documents" multiple class="file-input file-input-bordered w-full">
+    </div>
+
     <!-- Video Upload Form -->
-    <h2>Videos</h2>
-    {{ video_form.as_p }}
-    
-    <button type="submit">Save Changes</button>
+    <h2 class="text-2xl font-semibold text-secondary mt-6">🎥 Upload Videos</h2>
+    <div class="form-control">
+      <label for="id_videos" class="label">Upload Videos</label>
+      <input type="file" name="videos" id="id_videos" multiple class="file-input file-input-bordered w-full">
+    </div>
+
+    <!-- Document Form -->
+    <div class="mt-6">
+      {{ document_form.as_p }}
+    </div>
+
+    <!-- Video Form -->
+    <div class="mt-6">
+      {{ video_form.as_p }}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary mt-6 w-full">💾 Save Changes</button>
   </form>
 
-  <hr>
+  <hr class="my-8">
 
   <!-- Existing Files Section -->
-  <h2>Existing Files</h2>
+  <h2 class="text-2xl font-semibold text-secondary mb-4">📂 Existing Files</h2>
 
   <!-- Display Images -->
-  <h3>Images</h3>
-  <ul>
+  <h3 class="text-lg font-semibold text-accent">Images</h3>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-3">
     {% for image in existing_images %}
-      <li>
-        <img src="{{ image.image.url }}" alt="Image" style="width: 200px; height: 150px;">
-        <a href="{% url 'delete_property_file' file_type='image' file_id=image.id %}">Delete</a>
-      </li>
+      <div class="card bg-base-100 shadow-md p-4 rounded-lg">
+        <img src="{{ image.image.url }}" alt="Image" class="rounded-lg w-full h-32 object-cover">
+        <a href="{% url 'delete_property_file' file_type='image' file_id=image.id %}" class="btn btn-error btn-sm mt-2">🗑️ Delete</a>
+      </div>
     {% empty %}
-      <li>No images uploaded.</li>
+      <p class="text-gray-500">No images uploaded.</p>
     {% endfor %}
-  </ul>
+  </div>
 
   <!-- Display Documents -->
-  <h3>Documents</h3>
-  <ul>
+  <h3 class="text-lg font-semibold text-accent mt-6">Documents</h3>
+  <ul class="list-disc pl-6 mt-2">
     {% for document in existing_documents %}
-      <li>
-        <a href="{{ document.document.url }}" target="_blank">{{ document.document.name }}</a>
-        <a href="{% url 'delete_property_file' file_type='document' file_id=document.id %}">Delete</a>
+      <li class="flex justify-between items-center bg-base-200 p-3 rounded-lg">
+        <a href="{{ document.document.url }}" target="_blank" class="text-primary">{{ document.document.name }}</a>
+        <a href="{% url 'delete_property_file' file_type='document' file_id=document.id %}" class="btn btn-error btn-xs">🗑️ Delete</a>
       </li>
     {% empty %}
-      <li>No documents uploaded.</li>
+      <p class="text-gray-500">No documents uploaded.</p>
     {% endfor %}
   </ul>
 
   <!-- Display Videos -->
-  <h3>Videos</h3>
-  <ul>
+  <h3 class="text-lg font-semibold text-accent mt-6">Videos</h3>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-3">
     {% for video in existing_videos %}
-      <li>
-        <video width="320" height="240" controls>
+      <div class="card bg-base-100 shadow-md p-4 rounded-lg">
+        <video width="100%" height="160" controls class="rounded-lg">
           <source src="{{ video.video.url }}" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <a href="{% url 'delete_property_file' file_type='video' file_id=video.id %}">Delete</a>
-      </li>
+        <a href="{% url 'delete_property_file' file_type='video' file_id=video.id %}" class="btn btn-error btn-sm mt-2">🗑️ Delete</a>
+      </div>
     {% empty %}
-      <li>No videos uploaded.</li>
+      <p class="text-gray-500">No videos uploaded.</p>
     {% endfor %}
-  </ul>
+  </div>
+
+</div>
 {% endblock %}

@@ -1,0 +1,79 @@
+<!-- Navbar -->
+<nav class="navbar top-0 z-50 mx-auto w-full lg:w-full bg-base-100 text-base-content rounded-lg p-3 m-2 shadow-lg flex items-center justify-between">
+  <!-- Left Logo (25%) -->
+  <div class="w-1/4 px-4">
+    <a href="/" class="text-xl font-bold">R-Zone</a>
+  </div>
+
+  <!-- Center Menu (50%) - Hidden on Small Screens -->
+  <div class="hidden lg:flex w-1/2 justify-center flex-wrap gap-4">
+    <ul class="menu menu-horizontal flex flex-wrap justify-center space-x-2 sm:space-x-4">
+      <li><a href="{% url 'home' %}" class="hover:text-primary">Home</a></li>
+      <li><a href="{% url 'property_index' %}" class="hover:text-primary">Property</a></li>
+      <li><a href="{% url 'group_list' %}" class="hover:text-primary">Groups</a></li>
+      <li><a href="{% url 'service' %}" class="hover:text-primary">Service</a></li>
+      <li><a href="{% url 'contact' %}" class="hover:text-primary">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- Right Side (25%) -->
+  <div class="w-1/4 flex justify-end items-center space-x-4">
+    <!-- Sign In and Sign Up Buttons -->
+    {% if user.is_authenticated %}
+    <div class="flex items-center text-base-content">
+      <span class="mr-2">Hello, <a href="{% url 'dashboard' %}" class="text-blue-500 hover:underline">{{ user.username }}!</a></span>
+      <a href="{% url 'logout' %}" class="btn btn-sm btn-ghost hover:bg-error hover:text-white">Logout</a>
+    </div>
+  {% else %}
+    <a href="{% url 'login' %}" class="hidden lg:flex items-center btn btn-sm btn-ghost hover:bg-primary hover:text-white">Sign In</a>
+    <a href="{% url 'register' %}" class="hidden lg:flex items-center btn btn-sm btn-primary">Sign Up</a>
+  {% endif %}
+
+    <!-- Theme Toggle Dropdown -->
+    <div class="dropdown dropdown-end">
+      <label tabindex="0" class="btn btn-sm btn-ghost">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      </label>
+      <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 text-base-content rounded-box w-40">
+        <li><a onclick="changeTheme('light')">☀️ Light</a></li>
+        <li><a onclick="changeTheme('dark')">🌙 Dark</a></li>
+        <li><a onclick="changeTheme('cupcake')">🍰 Cupcake</a></li>
+        <li><a onclick="changeTheme('bumblebee')">🐝 Bumblebee</a></li>
+        <li><a onclick="changeTheme('synthwave')">🎵 Synthwave</a></li>
+        <li><a onclick="changeTheme('dracula')">🧛 Dracula</a></li>
+      </ul>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="lg:hidden btn btn-sm btn-ghost" onclick="toggleMobileMenu()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu (Hidden by Default) -->
+<div id="mobile-menu" class="hidden bg-base-100 p-4 rounded-lg shadow-lg lg:hidden mt-14 z-40">
+  <ul class="space-y-2 text-center">
+    <li><a href="{% url 'home' %}" class="block hover:text-primary">Home</a></li>
+    <li><a href="{% url 'property_index' %}" class="block hover:text-primary">Property</a></li>
+    <li><a href="{% url 'group_list' %}" class="block hover:text-primary">Groups</a></li>
+    <li><a href="{% url 'service' %}" class="block hover:text-primary">Service</a></li>
+    <li><a href="{% url 'contact' %}" class="block hover:text-primary">Contact</a></li>
+    <li><a href="{% url 'login' %}" class="btn btn-sm btn-primary w-full">Sign In</a></li>
+    <li><a href="{% url 'register' %}" class="btn btn-sm btn-secondary w-full">Sign Up</a></li>
+  </ul>
+</div>
+
+<!-- JavaScript for Mobile Menu and Theme Switcher -->
+<script>
+  function toggleMobileMenu() {
+    document.getElementById("mobile-menu").classList.toggle("hidden");
+  }
+  function changeTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+  }
+</script>

@@ -1,0 +1,414 @@
+
+    <!-- Additional Info -->
+    <div class="container mx-auto">
+        <div class="">
+    <!-- Land Property Details -->
+          {% if property.landproperty %}
+            <!-- Property Details -->
+<!-- Property Details -->
+<div class="bg-base-100 rounded-lg p-6 shadow-sm mt-6">
+    <h2 class="text-2xl font-bold text-base-content mb-6">Land Property Details</h2>
+  
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Property Type -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Property Type</p>
+        <p class="text-lg font-semibold text-base-content">{{ property.landproperty.property_type }}</p>
+      </div>
+  
+      <!-- Total Area -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Total Area</p>
+        <p class="text-lg font-semibold text-base-content">{{ property.landproperty.total_area }} {{ property.landproperty.area_unit }}</p>
+      </div>
+  
+      <!-- Price -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow col-span-2">
+        <p class="text-sm text-base-content/70">Price</p>
+        <p class="text-2xl font-bold text-primary">${{ property.landproperty.price }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Nearby Information -->
+  <div class="bg-base-100 rounded-lg p-6 shadow-sm mt-6">
+    <h2 class="text-2xl font-bold text-base-content mb-6">Nearby Information</h2>
+  
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Nearby Amenities -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Nearby Amenities</p>
+        <p class="text-lg font-semibold text-primary">{{ property.landproperty.nearby_amenities }}</p>
+      </div>
+      
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Nearby</p>
+        <p class="text-lg font-semibold text-primary">{{ property.landproperty.nearby }}</p>
+      </div>
+  
+      <!-- Nearest Road -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Nearest Road</p>
+        <p class="text-lg font-semibold text-primary">{{ property.landproperty.distance_from_road }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Property Features -->
+  <div class="bg-base-100 rounded-lg p-6 shadow-sm mt-6">
+    <h2 class="text-2xl font-bold text-base-content mb-6">Property Features</h2>
+  
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Water Availability -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Water Availability</p>
+        <p class="text-lg font-semibold {% if property.landproperty.has_water %}text-success{% else %}text-error{% endif %}">
+          {% if property.landproperty.has_water %} Yes {% else %} No {% endif %}
+        </p>
+      </div>
+  
+      <!-- Electricity Availability -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Electricity Availability</p>
+        <p class="text-lg font-semibold {% if property.landproperty.has_electricity %}text-success{% else %}text-error{% endif %}">
+          {% if property.landproperty.has_electricity %} Yes {% else %} No {% endif %}
+        </p>
+      </div>
+  
+      <!-- Corner Plot -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Corner Plot</p>
+        <p class="text-lg font-semibold {% if property.landproperty.is_corner_plot %}text-success{% else %}text-error{% endif %}">
+          {% if property.landproperty.is_corner_plot %} Yes {% else %} No {% endif %}
+        </p>
+      </div>
+  
+      <!-- Soil Type -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Soil Type</p>
+        <p class="text-lg font-semibold text-base-content">{{ property.landproperty.soil_type }}</p>
+      </div>
+  
+      <!-- Irrigation Facilities -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Irrigation Facilities</p>
+        <p class="text-lg font-semibold {% if property.landproperty.irrigation_facilities %}text-success{% else %}text-error{% endif %}">
+          {% if property.landproperty.irrigation_facilities %} Yes {% else %} No {% endif %}
+        </p>
+      </div>
+  
+      <!-- Facing -->
+      <div class="bg-base-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <p class="text-sm text-base-content/70">Facing</p>
+        <p class="text-lg font-semibold text-base-content">{{ property.landproperty.facing }}</p>
+      </div>
+    </div>
+  </div>
+    
+    <!-- Land Property Details End -->
+
+
+    
+
+    <!-- Residential Property Details -->
+    {% elif property.residentialproperty %}
+    <!-- Property Details -->
+<div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+    <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Land Property</h2>
+  
+    <div class="grid grid-cols-2 gap-4">
+      <p class="text-lg">
+        <strong class="text-base-content/70">Property Type:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.property_type }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Total Area:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.built_up_area }} {{ property.residentialproperty.area_unit }}</span>
+      </p>
+      <p class="text-lg col-span-2">
+        <strong class="text-base-content/70">Price:</strong>
+        <span class="text-primary font-semibold">${{ property.residentialproperty.price }}</span>
+      </p>
+    </div>
+  </div>
+  
+  <!-- Nearby Information -->
+  <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+    <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Nearby Information</h2>
+  
+    <div class="grid grid-cols-2 gap-4">
+      <p class="text-lg">
+        <strong class="text-base-content/70">Nearby Amenities:</strong>
+        <span class="text-primary font-semibold">{{ property.residentialproperty.nearby_amenities }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Nearby:</strong>
+        <span class="text-primary font-semibold">{{ property.residentialproperty.nearby }}</span>
+      </p>
+      <p class="text-lg col-span-2">
+        <strong class="text-base-content/70">Nearest Road:</strong>
+        <span class="text-primary font-semibold">{{ property.residentialproperty.distance_from_road }}</span>
+      </p>
+    </div>
+  </div>
+  
+  <!-- Property Features -->
+  <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+    <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Property Features</h2>
+  
+    <div class="grid grid-cols-2 gap-4">
+      <p class="text-lg">
+        <strong class="text-base-content/70">Bedrooms:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.bedrooms }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Bathrooms:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.bathrooms }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Furnishing Status:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.furnishing_status }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Parking:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.parking }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Floor Number:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.floor_number }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Balconies:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.balcony_count }}</span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Garden:</strong>
+        <span class="{% if property.residentialproperty.has_garden %}text-success{% else %}text-error{% endif %}">
+          {% if property.residentialproperty.has_garden %} Yes {% else %} No {% endif %}
+        </span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Security:</strong>
+        <span class="{% if property.residentialproperty.has_security %}text-success{% else %}text-error{% endif %}">
+          {% if property.residentialproperty.has_security %} Yes {% else %} No {% endif %}
+        </span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Swimming Pool:</strong>
+        <span class="{% if property.residentialproperty.has_pool %}text-success{% else %}text-error{% endif %}">
+          {% if property.residentialproperty.has_pool %} Yes {% else %} No {% endif %}
+        </span>
+      </p>
+      <p class="text-lg">
+        <strong class="text-base-content/70">Year Built:</strong>
+        <span class="text-base-content">{{ property.residentialproperty.year_built }}</span>
+      </p>
+    </div>
+  </div>
+    <!-- Residential Property Details End -->
+
+    <!-- Commercial Property Details  -->
+
+    {% elif property.commercialproperty %}
+    
+  
+      <!-- Commercial Property Details -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Commercial Property</h2>
+        
+            <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg">
+                <strong class="text-base-content/70">Property Type:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.property_type }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Total Area:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.area }} {{ property.commercialproperty.area_unit }}</span>
+            </p>
+            <p class="text-lg col-span-2">
+                <strong class="text-base-content/70">Price:</strong>
+                <span class="text-primary font-semibold">${{ property.commercialproperty.price }}</span>
+            </p>
+            </div>
+        </div>
+        
+        <!-- Nearby Information -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Nearby Information</h2>
+        
+            <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg">
+                <strong class="text-base-content/70">Nearby Amenities:</strong>
+                <span class="text-primary font-semibold">{{ property.commercialproperty.nearby_amenities }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Nearby:</strong>
+                <span class="text-primary font-semibold">{{ property.commercialproperty.nearby }}</span>
+            </p>
+            <p class="text-lg col-span-2">
+                <strong class="text-base-content/70">Nearest Road:</strong>
+                <span class="text-primary font-semibold">{{ property.commercialproperty.distance_from_road }}</span>
+            </p>
+            </div>
+        </div>
+        
+        <!-- Property Features -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Property Features</h2>
+        
+            <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg">
+                <strong class="text-base-content/70">Furnishing Status:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.furnishing_status }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Parking:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.parking }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Year Built:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.year_built }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Total Floors:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.total_floors }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Floor Number:</strong>
+                <span class="text-base-content">{{ property.commercialproperty.floor_number }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Air Conditioning:</strong>
+                <span class="{% if property.commercialproperty.has_air_conditioning %}text-success{% else %}text-error{% endif %}">
+                {% if property.commercialproperty.has_air_conditioning %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Elevator:</strong>
+                <span class="{% if property.commercialproperty.has_elevator %}text-success{% else %}text-error{% endif %}">
+                {% if property.commercialproperty.has_elevator %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Renovated:</strong>
+                <span class="{% if property.commercialproperty.is_renovated %}text-success{% else %}text-error{% endif %}">
+                {% if property.commercialproperty.is_renovated %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Security:</strong>
+                <span class="{% if property.commercialproperty.has_security %}text-success{% else %}text-error{% endif %}">
+                {% if property.commercialproperty.has_security %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Power Backup:</strong>
+                <span class="{% if property.commercialproperty.power_backup %}text-success{% else %}text-error{% endif %}">
+                {% if property.commercialproperty.power_backup %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            </div>
+        </div>
+    <!-- Commercial Property Details End -->
+
+    <!-- Industrial Property Details -->
+
+    {% elif property.industrialproperty %}
+    
+        <!-- Industrial Property Details -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Industrial Property</h2>
+        
+            <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg">
+                <strong class="text-base-content/70">Property Type:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.property_type }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Total Area:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.area }} {{ property.industrialproperty.area_unit }}</span>
+            </p>
+            <p class="text-lg col-span-2">
+                <strong class="text-base-content/70">Price:</strong>
+                <span class="text-primary font-semibold">${{ property.industrialproperty.price }}</span>
+            </p>
+            </div>
+        </div>
+        
+        <!-- Nearby Information -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Nearby Information</h2>
+        
+            <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg">
+                <strong class="text-base-content/70">Nearby Amenities:</strong>
+                <span class="text-primary font-semibold">{{ property.industrialproperty.nearby_amenities }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Nearby:</strong>
+                <span class="text-primary font-semibold">{{ property.industrialproperty.nearby }}</span>
+            </p>
+            <p class="text-lg col-span-2">
+                <strong class="text-base-content/70">Nearest Road:</strong>
+                <span class="text-primary font-semibold">{{ property.industrialproperty.distance_from_road }}</span>
+            </p>
+            </div>
+        </div>
+        
+        <!-- Property Features -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-xl font-semibold text-primary border-b pb-2 mb-4">Property Features</h2>
+        
+            <div class="grid grid-cols-2 gap-4">
+            <p class="text-lg">
+                <strong class="text-base-content/70">Furnishing Status:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.furnishing_status }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Parking:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.parking }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Year Built:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.year_built }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Total Floors:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.total_floors }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Floor Number:</strong>
+                <span class="text-base-content">{{ property.industrialproperty.floor_number }}</span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Air Conditioning:</strong>
+                <span class="{% if property.industrialproperty.has_air_conditioning %}text-success{% else %}text-error{% endif %}">
+                {% if property.industrialproperty.has_air_conditioning %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Elevator:</strong>
+                <span class="{% if property.industrialproperty.has_elevator %}text-success{% else %}text-error{% endif %}">
+                {% if property.industrialproperty.has_elevator %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            <p class="text-lg">
+                <strong class="text-base-content/70">Renovated:</strong>
+                <span class="{% if property.industrialproperty.is_renovated %}text-success{% else %}text-error{% endif %}">
+                {% if property.industrialproperty.is_renovated %} Yes {% else %} No {% endif %}
+                </span>
+            </p>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Unknown Property Type -->
+        <div class="bg-base-100 shadow-md rounded-lg p-4 border border-base-300 mt-4">
+            <h2 class="text-2xl font-semibold text-base-content">Unknown Property Type</h2>
+            <p class="text-base-content/70 mt-2">No specific property type found. Please check the details.</p>
+        </div>
+    {% endif %}
+    </div>
+</div>
+
+<!-- Additional Info -->

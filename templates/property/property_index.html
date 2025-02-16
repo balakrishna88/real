@@ -1,280 +1,169 @@
-<!-- templates/property_index.html -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({
+        duration: 1000, // Animation duration
+        once: true, // Animate only once
+      });
+    });
+  </script>
 
+<div class="max-w-screen-xl mx-auto py-8 px-4 lg:py-16 lg:px-6 overflow-hidden">
 
-{% load static %}
-<!-- Land Properties Section -->
-<section id="land-properties" class="m-6 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">Land Properties</h2>
-  
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for property in land_properties %}
-        <div class="relative p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
-                    hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-          
-          <!-- Property Image with Deal Type Badge -->
-          <a href="{% url 'property_detail' property.slug %}" class="block">
-          <div class="relative">
-            {% if property.images.all %}
-                <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" class="w-full h-40 object-cover rounded-lg">
-            {% else %}
-                <img src="{% static 'images/nophoto.jpg' %}" alt="No Image Available" class="w-full h-40 object-cover rounded-lg">
-            {% endif %}
-
-  
-            <!-- Deal Type Badge (Top Left) -->
-            <span class="absolute top-2 left-2 px-3 py-1 text-xs font-semibold text-white rounded-md shadow-md 
-                        {% if property.deal_type == 'SELL' %} bg-red-600 dark:bg-red-400 
-                        {% elif property.deal_type == 'BUY' %} bg-green-600 dark:bg-green-400 
-                        {% elif property.deal_type == 'RENT' %} bg-blue-600 dark:bg-blue-400 
-                        {% else %} bg-gray-700 dark:bg-gray-500 {% endif %}">
-              {{ property.get_deal_type_display }}
-            </span>
-          </div>
-  
-          <!-- Property Details -->
-          <div class="p-3 text-gray-800 dark:text-gray-200">
-            <strong class="text-lg block">{{ property.title }}</strong>
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ property.state }} | {{ property.subdivision }} | {{ property.village }}</p>
-          </div>
-  
-          <!-- Listing Date (Bottom) -->
-          <p class="text-xs text-gray-600 dark:text-gray-400 text-right mt-auto p-2">
-             Listed on: {{ property.listing_date }}
-          </p>
-        </div></a>
-      {% empty %}
-        <p class="text-gray-700 dark:text-gray-300 text-center py-6 col-span-4">No land properties available.</p>
-      {% endfor %}
+  <!-- Section 1: Land -->
+  <div class="mb-16" data-aos="fade-up">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl tracking-tight font-bold text-green-800">Land</h2>
     </div>
-  
-    <!-- View More Button -->
-    <div class="flex justify-center mt-6">
-      <a href="{% url 'property_list' property_type='land' %}" 
-         class="px-5 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300">
-        View More
-      </a>
-    </div>
-  </section>
-  
-
-
-
-<!-- Residential Properties Section -->
-<section id="residential-properties" class="m-6 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">Residential Properties</h2>
-  
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for property in residential_properties %}
-        <div class="relative p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
-                    hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+    <div class="flex flex-col md:flex-row">
+      <!-- Left Column: Image -->
+      <div class="w-full md:w-1/3 text-center md:text-left" data-aos="fade-right">
+        <img class="w-full max-w-sm mx-auto md:mx-0 h-auto rounded-lg" src="{% static 'images/hero.png' %}" alt="Land Image">
+        <h3 class="text-xl font-semibold mt-4 text-accent">
+            Expand Your Business Horizons
+        </h3>
         
+        <div class="mt-4">
+          <a href="{% url 'property_list' property_type='land' %}" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
+            Read More Posts
+          </a>
+        </div>
+      </div>
+      
+      <!-- Right Column: Cards -->
+      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 ml-0 md:ml-8 mt-6 md:mt-0" data-aos="fade-left">
+        <!-- Card 1 -->
+        {% for property in land_properties %}
         <a href="{% url 'property_detail' property.slug %}" class="block">
-          <!-- Property Image with Deal Type Badge -->
-          <div class="relative">
-            {% if property.images.all %}
-                <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" class="w-full h-40 object-cover rounded-lg">
-            {% else %}
-                <img src="{% static 'images/nophoto.jpg' %}" alt="No Image Available" class="w-full h-40 object-cover rounded-lg">
-            {% endif %}
-
-  
-            <!-- Deal Type Badge (Top Left) -->
-            <span class="absolute top-2 left-2 px-3 py-1 text-xs font-semibold text-white rounded-md shadow-md 
-                        {% if property.deal_type == 'SELL' %} bg-red-600 dark:bg-red-400 
-                        {% elif property.deal_type == 'BUY' %} bg-green-600 dark:bg-green-400 
-                        {% elif property.deal_type == 'RENT' %} bg-blue-600 dark:bg-blue-400 
-                        {% else %} bg-gray-700 dark:bg-gray-500 {% endif %}">
-              {{ property.get_deal_type_display }}
-            </span>
-          </div>
-  
-          <!-- Property Details -->
-          <div class="p-3 text-gray-800 dark:text-gray-200">
-            <strong class="text-lg block">{{ property.title }}</strong>
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ property.state }} | {{ property.subdivision }} | {{ property.village }}</p>
-          </div>
-  
-          <!-- Listing Date (Bottom) -->
-          <p class="text-xs text-gray-600 dark:text-gray-400 text-right mt-auto p-2">
-             Listed on: {{ property.listing_date }}
-          </p>
-        </div></a>
-      {% empty %}
-        <p class="text-gray-700 dark:text-gray-300 text-center py-6 col-span-4">No residential properties available.</p>
-      {% endfor %}
+        <div class="h-full py-4 px-6 border border-green-500 rounded-lg shadow-md transition duration-300 ease-in-out hover:bg-green-100 hover:scale-105 hover:border-green-600">
+            <h3 class="text-2xl font-bold mb-4">{{ property.title }}</h3>
+              <p class="text-sm">{{ property.state }} | {{ property.subdivision }}  {{ property.listing_date }}</p>
+        </div>
+        </a>
+        {% endfor %}
+        
+          
+      </div>
     </div>
-  
-    <!-- View More Button -->
-    <div class="flex justify-center mt-6">
-      <a href="{% url 'property_list' property_type='residential' %}" 
-         class="px-5 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300">
-        View More
-      </a>
-    </div>
-  </section>
+  </div>
 
-  <!-- Commercial Properties Section -->
-<section id="commercial-properties" class="m-6 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">Commercial Properties</h2>
-  
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for property in commercial_properties %}
-        <div class="relative p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
-                    hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+  <!-- Section 2: Residential -->
+<div class="mb-16" data-aos="fade-up">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl tracking-tight font-bold text-blue-800">Residential</h2>
+    </div>
+    <div class="flex flex-col md:flex-row-reverse">
+      <!-- Right Column: Image -->
+      <div class="w-full md:w-1/3 text-center md:text-right" data-aos="fade-left">
+        <img class="w-[90%] max-w-full mx-auto md:mx-0 h-auto rounded-lg" src="{% static 'images/hero.png' %}" alt="Residential Image">
+        <h3 class="text-xl font-semibold mt-4 text-secondary">
+            Expand Your Business Horizons
+        </h3>
+        
+        <div class="mt-4">
+          <a href="{% url 'property_list' property_type='residential' %}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+            Read More Posts
+          </a>
+        </div>
+      </div>
+      <!-- Left Column: Cards -->
+      <div class="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-6 md:mt-0" data-aos="fade-right">
+        <!-- Card 1 -->
+        {% for property in residential_properties %}
         <a href="{% url 'property_detail' property.slug %}" class="block">
-          <!-- Property Image with Deal Type Badge -->
-          <div class="relative">
-            {% if property.images.all %}
-                <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" class="w-full h-40 object-cover rounded-lg">
-            {% else %}
-                <img src="{% static 'images/nophoto.jpg' %}" alt="No Image Available" class="w-full h-40 object-cover rounded-lg">
-            {% endif %}
+        <div class="h-full py-4 px-6 border border-blue-500 rounded-lg shadow-md transition duration-300 ease-in-out hover:bg-blue-100 hover:scale-105 hover:border-blue-500">
+          <h3 class="text-2xl font-bold mb-4 text-blue-700">{{ property.title }}</h3>
+          <p class="text-sm">{{ property.state }} | {{ property.subdivision }} {{ property.listing_date }}</p>
+        </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
   
-            <!-- Deal Type Badge (Top Left) -->
-            <span class="absolute top-2 left-2 px-3 py-1 text-xs font-semibold text-white rounded-md shadow-md 
-                        {% if property.deal_type == 'SELL' %} bg-red-600 dark:bg-red-400 
-                        {% elif property.deal_type == 'BUY' %} bg-green-600 dark:bg-green-400 
-                        {% elif property.deal_type == 'RENT' %} bg-blue-600 dark:bg-blue-400 
-                        {% else %} bg-gray-700 dark:bg-gray-500 {% endif %}">
-              {{ property.get_deal_type_display }}
-            </span>
-          </div>
   
-          <!-- Property Details -->
-          <div class="p-3 text-gray-800 dark:text-gray-200">
-            <strong class="text-lg block">{{ property.title }}</strong>
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ property.state }} | {{ property.subdivision }} | {{ property.village }}</p>
-          </div>
-  
-          <!-- Listing Date (Bottom) -->
-          <p class="text-xs text-gray-600 dark:text-gray-400 text-right mt-auto p-2">
-             Listed on: {{ property.listing_date }}
-          </p>
-        </div></a>
-      {% empty %}
-        <p class="text-gray-700 dark:text-gray-300 text-center py-6 col-span-4">No commercial properties available.</p>
-      {% endfor %}
+  <!-- Section 3: Commercial -->
+  <div class="mb-16" data-aos="fade-up">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl tracking-tight font-bold text-yellow-800">Commercial</h2>
     </div>
-  
-    <!-- View More Button -->
-    <div class="flex justify-center mt-6">
-      <a href="{% url 'property_list' property_type='commercial' %}" 
-         class="px-5 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300">
-        View More
-      </a>
-    </div>
-  </section>
-
-  <!-- Industrial Properties Section -->
-<section id="industrial-properties" class="m-6 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">Industrial Properties</h2>
-  
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for property in industrial_properties %}
-        <div class="relative p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
-                    hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+    <div class="flex flex-col md:flex-row">
+      <!-- Left Column: Image -->
+      <div class="w-full md:w-1/3 text-center md:text-left" data-aos="fade-right">
+        <img class="w-[90%] mx-auto md:mx-0 h-auto rounded-lg" src="{% static 'images/hero.png' %}" alt="Commercial Image">
+        <h3 class="text-xl font-semibold mt-4 text-primary">
+            Expand Your Business Horizons
+        </h3>
+        
+        <div class="mt-4">
+          <a href="{% url 'property_list' property_type='commercial' %}" class="px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition font-semibold">
+            Read More Posts
+          </a>
+        </div>
+      </div>
+      <!-- Right Column: Cards -->
+      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 ml-0 md:ml-8 mt-6 md:mt-0" data-aos="fade-left">
+        <!-- Card 1 -->
+        {% for property in commercial_properties %}
         <a href="{% url 'property_detail' property.slug %}" class="block">
-          <!-- Property Image with Deal Type Badge -->
-          <div class="relative">
-            {% if property.images.all %}
-                <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" class="w-full h-40 object-cover rounded-lg">
-            {% else %}
-                <img src="{% static 'images/nophoto.jpg' %}" alt="No Image Available" class="w-full h-40 object-cover rounded-lg">
-            {% endif %}
-
-  
-            <!-- Deal Type Badge (Top Left) -->
-            <span class="absolute top-2 left-2 px-3 py-1 text-xs font-semibold text-white rounded-md shadow-md 
-                        {% if property.deal_type == 'SELL' %} bg-red-600 dark:bg-red-400 
-                        {% elif property.deal_type == 'BUY' %} bg-green-600 dark:bg-green-400 
-                        {% elif property.deal_type == 'RENT' %} bg-blue-600 dark:bg-blue-400 
-                        {% else %} bg-gray-700 dark:bg-gray-500 {% endif %}">
-              {{ property.get_deal_type_display }}
-            </span>
-          </div>
-  
-          <!-- Property Details -->
-          <div class="p-3 text-gray-800 dark:text-gray-200">
-            <strong class="text-lg block">{{ property.title }}</strong>
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ property.state }} | {{ property.subdivision }} | {{ property.village }}</p>
-          </div>
-  
-          <!-- Listing Date (Bottom) -->
-          <p class="text-xs text-gray-600 dark:text-gray-400 text-right mt-auto p-2">
-             Listed on: {{ property.listing_date }}
-          </p>
-        </div></a>
-      {% empty %}
-        <p class="text-gray-700 dark:text-gray-300 text-center py-6 col-span-4">No industrial properties available.</p>
-      {% endfor %}
+        <div class="h-full py-4 px-6 border border-yellow-500 rounded-lg shadow-md transition duration-300 ease-in-out hover:bg-yellow-100 hover:scale-105 hover:border-yellow-500">
+            <h3 class="text-2xl font-bold mb-4 text-yellow-700">{{ property.title }}</h3>
+            <p class="text-sm">{{ property.state }} | {{ property.subdivision }} {{ property.listing_date }}</p>
+        </div>
+        </a>
+        {% endfor %}
+      </div>
     </div>
-  
-    <!-- View More Button -->
-    <div class="flex justify-center mt-6">
-      <a href="{% url 'property_list' property_type='industrial' %}" 
-         class="px-5 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300">
-        View More
-      </a>
-    </div>
-  </section>
+  </div>
 
-<!-- Repeat for Other Sections (Residential, Commercial, Industrial) -->
-<!-- All Properties Section -->
-<section id="all-properties" class="m-6 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md"">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">All Properties</h2>
+
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for property in all_properties %}
-        <div class="relative p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
-                    hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+  <!-- Section 4: Industrial -->
+  <div class="mb-16" data-aos="fade-up">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl tracking-tight font-bold text-purple-800">Industrial</h2>
+    </div>
+    <div class="flex flex-col md:flex-row-reverse">
+      <!-- Right Column: Image -->
+      <div class="w-full md:w-1/3 text-center md:text-right" data-aos="fade-left">
+        <img class="w-[90%] mx-auto md:mx-0 h-auto rounded-lg" src="{% static 'images/hero.png' %}" alt="Industrial Image">
+        <h3 class="text-xl font-semibold mt-4 text-primary">
+            Expand Your Business Horizons
+        </h3>
+        
+        <div class="mt-4">
+          <a href="{% url 'property_list' property_type='industrial' %}" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-semibold">
+            Read More Posts
+          </a>
+        </div>
+      </div>
+      <!-- Left Column: Cards -->
+      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mr-0 md:mr-8 mt-6 md:mt-0" data-aos="fade-right">
+        <!-- Card 1 -->
+        {% for property in industrial_properties %}
         <a href="{% url 'property_detail' property.slug %}" class="block">
-          <!-- Property Image -->
-          <div class="relative">
-            {% if property.images.all %}
-              <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" 
-                   class="w-full h-40 object-cover rounded-lg">
-            {% else %}
-              <img src="{% static 'images/nophoto.jpg' %}" alt="No Image Available" 
-                   class="w-full h-40 object-cover rounded-lg">
-            {% endif %}
-  
-            <!-- Deal Type Badge (Top Left) -->
-            <span class="absolute top-2 left-2 px-3 py-1 text-xs font-semibold text-white rounded-md shadow-md 
-                        {% if property.deal_type == 'SELL' %} bg-red-600 dark:bg-red-400 
-                        {% elif property.deal_type == 'BUY' %} bg-green-600 dark:bg-green-400 
-                        {% elif property.deal_type == 'RENT' %} bg-blue-600 dark:bg-blue-400 
-                        {% else %} bg-gray-700 dark:bg-gray-500 {% endif %}">
-              {{ property.get_deal_type_display }}
-            </span>
-          </div>
-  
-          <!-- Property Details -->
-          <div class="p-3 text-gray-800 dark:text-gray-200">
-            <strong class="text-lg block">{{ property.title }}</strong>
-          </div>
-  
-          <!-- Listing Date (Bottom) -->
-          <p class="text-xs text-gray-600 dark:text-gray-400 text-right mt-auto p-2">
-             Listed on: {{ property.listing_date }}
-          </p>
-        </div></a>
-      {% empty %}
-        <p class="text-gray-700 dark:text-gray-300 text-center py-6 col-span-4">No properties available.</p>
-      {% endfor %}
+        <div class="h-full py-4 px-6 border border-purple-500 rounded-lg shadow-md transition duration-300 ease-in-out hover:bg-purple-100 hover:scale-105 hover:border-purple-500">
+            <h3 class="text-2xl font-bold mb-4 text-purple-700">{{ property.title }}</h3>
+            <p class="text-sm">{{ property.state }} | {{ property.subdivision }} {{ property.listing_date }}</p>
+        </div>
+        </a>
+        {% endfor %}
+      </div>
     </div>
-  
-    <!-- View More Button -->
-    <div class="flex justify-center mt-6">
-      <a href="{% url 'all_properties' %}" 
-         class="px-5 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300">
-        View More
-      </a>
-    </div>
-  </section>
-  
+  </div>
+
+
+
+
+
+</div>
+
+
 {% endblock %}

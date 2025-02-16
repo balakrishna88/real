@@ -266,6 +266,7 @@ from geopy.distance import geodesic
 def property_detail(request, property_slug):
     # Fetch the property instance
     property_instance = get_object_or_404(Property, slug=property_slug)
+    activity_data = get_property_activity(property_instance.id)
 
     mylat = property_instance.latitude
     mylon = property_instance.longitude
@@ -351,7 +352,8 @@ def property_detail(request, property_slug):
         'random_posts': random_posts,
         "author": author,
         'user_phone_number': user_phone_number,
-        "properties": nearby, "lat": user_location[0], "lon": user_location[1]
+        "properties": nearby, "lat": user_location[0], "lon": user_location[1],
+        'activity_data': activity_data,
 
     })
 
@@ -387,12 +389,14 @@ def chat_with_author(request, author_id):
 
 
 
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from chat.models import Notification
 from account.models import Account  
+
 def request_mobile(request):
     if request.method == "POST":
+        # Get form data
         user_id = request.POST.get("user_id")
         message = request.POST.get("message", "I would like to request your mobile number.")
         phone_number = request.POST.get("phone_number", "").strip()  # Get user input phone number
@@ -407,15 +411,17 @@ def request_mobile(request):
         # Create the notification
         Notification.objects.create(
             user=user,
-            message=f"{message}\nRequested by: {request.user.email}\nPhone: {phone_number or 'Not provided'}",
+            message=f"{message}\nRequested by: {request.user.email}\nPhone: {phone_number}",
             notification_type=Notification.MOBILE_REQUEST,
             is_read=False,
         )
 
+        # Success message
         messages.success(request, "Mobile request sent successfully.")
         return redirect(request.META.get("HTTP_REFERER", "home"))
 
-    return redirect("home")  # Redirect to home if accessed directly
+    # Redirect to home if accessed directly
+    return redirect("home")
 
 
 
@@ -496,7 +502,7 @@ def track_share(request, property_id):
         user_track, _ = PropertyUserTrack.objects.get_or_create(user_email=user_email)
         user_track.add_shared_property(property.id)
 
-    return redirect('property_detail', property_id=property_id)
+    return redirect('property_detail', property_slug=property.slug)
 
 
 
@@ -596,7 +602,7 @@ def property_comment(request, property_id):
             user_track, _ = PropertyUserTrack.objects.get_or_create(user_email=user_email)
             user_track.add_commented_property(property.id)
 
-    return redirect('property_detail', property_id=property_id)
+    return redirect('property_detail', property_slug=property.slug)
 
 def property_comment_reply(request, property_id, parent_id):
     """
@@ -623,7 +629,10 @@ def property_comment_reply(request, property_id, parent_id):
             user_track, _ = PropertyUserTrack.objects.get_or_create(user_email=user_email)
             user_track.add_commented_property(property.id)
 
-    return redirect('property_detail', property_id=property_id)
+    return redirect('property_detail', property_slug=property.slug)
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Comment, PropertyActions, PropertyUserTrack
 
 def delete_property_comment(request, comment_id):
     """
@@ -633,11 +642,14 @@ def delete_property_comment(request, comment_id):
 
     # Check if the comment belongs to the logged-in user or the author of the property
     if request.user.username == comment.user or request.user == comment.property.author:
-        property_id = comment.property.id
+        property = comment.property  # Access the property associated with the comment
+        property_id = property.id
+
+        # Delete the comment
         comment.delete()
         
         # Update PropertyActions
-        actions, _ = PropertyActions.objects.get_or_create(property=comment.property)
+        actions, _ = PropertyActions.objects.get_or_create(property=property)
         actions.update_count('comments', is_auth_user=request.user.is_authenticated, increment=False)
 
         # Update PropertyUserTrack for authenticated users
@@ -648,7 +660,8 @@ def delete_property_comment(request, comment_id):
                 user_track.property_comment.remove(property_id)
                 user_track.save()
     
-    return redirect('property_detail', property_id=property_id)
+    # Redirect to the property detail page
+    return redirect('property_detail', property_slug=property.slug)
 
 
 from django.shortcuts import get_object_or_404, redirect
@@ -748,10 +761,20 @@ def property_list(request, property_type=None):
 
     # Use the pagination utility function
     page_obj = paginate_queryset(request, queryset, items_per_page=10)
+    # Fetch activity data for each property in the paginated queryset
+    properties_with_activity = []
+    for property in page_obj:
+        activity_data = get_property_activity(property.id)
+        property.total_views = activity_data["views"]  # Attach views to the property object
+        property.total_likes = activity_data["likes"]  # Attach likes to the property object
+        property.total_shares = activity_data["shares"]  # Attach shares to the property object
+        properties_with_activity.append(property)
+    
 
     context = {
         'page_obj': page_obj,
         'property_type': property_type,
+        
     }
 
     return render(request, 'property/property_list.html', context)
@@ -783,3 +806,42 @@ def property_index(request):
     }
 
     return render(request, 'property/property_index.html', context)
+
+
+from django.shortcuts import get_object_or_404
+from .models import Property, PropertyActions, PropertyUserTrack
+
+def get_property_activity(property_id):
+    """
+    Fetch property activity details including likes, shares, views, comments, reports, and favourites.
+    """
+    activity_data = {
+        "likes": 0,
+        "shares": 0,
+        "views": 0,
+        "comments": 0,
+        "reports": 0,
+        "favourites": 0
+    }
+
+    # Fetch property actions (likes, shares, views, comments, reports for both auth users & guests)
+    try:
+        property_actions = PropertyActions.objects.get(property_id=property_id)
+        counts = property_actions.activity_counts
+
+        activity_data["likes"] = counts.get("auth_likes", 0) + counts.get("guest_likes", 0)
+        activity_data["shares"] = counts.get("auth_shares", 0) + counts.get("guest_shares", 0)
+        activity_data["views"] = counts.get("auth_views", 0) + counts.get("guest_views", 0)
+        activity_data["comments"] = counts.get("auth_comments", 0)
+        activity_data["reports"] = counts.get("auth_reports", 0)
+    except PropertyActions.DoesNotExist:
+        pass  # No actions recorded yet
+
+    # Fetch all user records and count manually
+    favourites_count = sum(
+        1 for user_track in PropertyUserTrack.objects.all()
+        if property_id in user_track.property_favourite
+    )
+    activity_data["favourites"] = favourites_count
+
+    return activity_data

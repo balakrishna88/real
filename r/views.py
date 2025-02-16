@@ -3,7 +3,7 @@ from django.shortcuts import render
 from property.models import CommercialProperty, IndustrialProperty, LandProperty, Property, PropertyActions, ResidentialProperty
 
 def home(request):
-    properties = Property.objects.filter(is_published=True).order_by('-updated_date')[:6]
+    properties = Property.objects.filter(is_published=True).order_by('-updated_date')[:8]
 
     # Fetch unique states, subdivisions, and villages
         # Fetch unique states, districts, subdivisions, and villages
@@ -288,7 +288,7 @@ def mysearch(request):
         'deal_type': deal_type,
     }
 
-    return render(request, 'test/mysearch.html', context)
+    return render(request, 'mysearch.html', context)
 
 
 def service(request):
