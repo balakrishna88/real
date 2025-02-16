@@ -741,11 +741,12 @@ def paginate_queryset(request, queryset, items_per_page=10):
 # views.py
 from django.shortcuts import render
 from .models import LandProperty, ResidentialProperty, CommercialProperty, IndustrialProperty, Property
-
+from django.db.models import Q
+from django.shortcuts import render
 
 def property_list(request, property_type=None):
     """
-    View to display paginated lists of properties based on the property type.
+    View to display paginated lists of properties based on the property type, deal type, and search query.
     """
     # Determine the queryset based on the property type
     if property_type == 'land':
@@ -759,8 +760,25 @@ def property_list(request, property_type=None):
     else:
         queryset = Property.objects.filter(is_published=True).order_by('-listing_date')
 
+    # Apply deal type filter (Buy, Sell, Rent)
+    deal_type = request.GET.get('deal_type', None)
+    if deal_type:
+        queryset = queryset.filter(deal_type__iexact=deal_type)
+
+    # Apply search query filter
+    search_query = request.GET.get('search_query', None)
+    if search_query:
+        print(f"Search Query Received: {search_query}")  # Debugging statement
+        queryset = queryset.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(location__icontains=search_query)
+        )
+        print(f"Filtered Queryset Count: {queryset.count()}")  # Debugging statement
+
     # Use the pagination utility function
     page_obj = paginate_queryset(request, queryset, items_per_page=10)
+
     # Fetch activity data for each property in the paginated queryset
     properties_with_activity = []
     for property in page_obj:
@@ -769,14 +787,13 @@ def property_list(request, property_type=None):
         property.total_likes = activity_data["likes"]  # Attach likes to the property object
         property.total_shares = activity_data["shares"]  # Attach shares to the property object
         properties_with_activity.append(property)
-    
 
     context = {
         'page_obj': page_obj,
         'property_type': property_type,
-        
+        'deal_type': deal_type,  # Pass the selected deal type to the template
+        'search_query': search_query,  # Pass the search query to the template
     }
-
     return render(request, 'property/property_list.html', context)
 
 

@@ -12,47 +12,45 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
   </head>
-  <div class="w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 m-2">
-    <div class="bg-base-100 p-4 rounded-lg shadow-[0_0_15px_5px_rgba(0,123,255,0.2)] flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 transition-shadow duration-300 hover:shadow-[0_0_20px_10px_rgba(0,123,255,0.3)] mx-auto">
-      <!-- Top Options -->
-      <div class="flex space-x-2">
-        <button class="btn btn-sm btn-primary hover:bg-primary-focus transition-colors duration-200">
-          <i class="fas fa-shopping-cart mr-1"></i> Buy
-        </button>
-        <button class="btn btn-sm btn-secondary hover:bg-secondary-focus transition-colors duration-200">
-          <i class="fas fa-tag mr-1"></i> Sell
-        </button>
-        <button class="btn btn-sm btn-accent hover:bg-accent-focus transition-colors duration-200">
-          <i class="fas fa-house-user mr-1"></i> Rent
-        </button>
+  <!--search filter-->
+  <!-- Search Filter -->
+    <div class="w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 m-2">
+      <div class="bg-base-100 p-4 rounded-lg shadow-[0_0_15px_5px_rgba(0,123,255,0.2)] flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 transition-shadow duration-300 hover:shadow-[0_0_20px_10px_rgba(0,123,255,0.3)] mx-auto">
+        <!-- Top Options -->
+        <div class="flex space-x-2">
+          <a href="?deal_type=buy" class="btn btn-sm {% if deal_type == 'buy' %}btn-primary{% else %}btn-outline{% endif %}">
+            <i class="fas fa-shopping-cart mr-1"></i> Buy
+          </a>
+          <a href="?deal_type=sell" class="btn btn-sm {% if deal_type == 'sell' %}btn-primary{% else %}btn-outline{% endif %}">
+            <i class="fas fa-tag mr-1"></i> Sell
+          </a>
+          <a href="?deal_type=rent" class="btn btn-sm {% if deal_type == 'rent' %}btn-primary{% else %}btn-outline{% endif %}">
+            <i class="fas fa-house-user mr-1"></i> Rent
+          </a>
+        </div>
+
+        <!-- Search Input -->
+<!-- Search Input -->
+<form method="GET" class="flex-grow relative">
+  <input
+    type="text"
+    name="search_query"
+    value="{{ search_query|default_if_none:'' }}"
+    placeholder="Search..."
+    class="input input-bordered w-full pr-20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+  />
+  <!-- Search Button -->
+  <button type="submit" class="absolute right-14 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm btn-primary hover:bg-primary-focus transition-colors duration-200">
+    <i class="fas fa-search text-white"></i>
+  </button>
+  <!-- Reset Button -->
+  <button type="button" onclick="window.location.href='?{{ request.GET.urlencode|default_if_none:''|cut:'&search_query='|cut:request.GET.search_query }}'" class="absolute right-2 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm btn-secondary hover:bg-secondary-focus transition-colors duration-200">
+    <i class="fas fa-times text-white"></i>
+  </button>
+</form>
       </div>
-  
-      <!-- Search Input -->
-      <div class="flex-grow relative">
-        <input
-          type="text"
-          placeholder="Search..."
-          class="input input-bordered w-full pr-10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-        />
-        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm btn-primary hover:bg-primary-focus transition-colors duration-200">
-          <i class="fas fa-search text-white"></i>
-        </button>
-      </div>
-  
-      <!-- Dropdown -->
-      <select class="select select-bordered w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
-        <option disabled selected>Property Type</option>
-        <option>Condominium</option>
-        <option>Apartment</option>
-        <option>Villa</option>
-      </select>
-  
-      <!-- Filter Button -->
-      <button class="btn btn-sm btn-outline btn-secondary hover:bg-secondary hover:text-white transition-all duration-200">
-        <i class="fas fa-filter mr-2"></i> Filter
-      </button>
     </div>
-  </div>
+  <!-- search filter-->
 
   <h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
     {% if property_type %}
