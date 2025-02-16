@@ -158,7 +158,7 @@
 
         // Establish WebSocket connection
         const chatSocket = new WebSocket(
-            `ws://${window.location.host}/ws/group_chat/${groupId}/`
+            `wss://${window.location.host}/ws/group_chat/${groupId}/`
         );
 
         chatSocket.onmessage = function (e) {
