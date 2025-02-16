@@ -44,9 +44,10 @@
     <i class="fas fa-search text-white"></i>
   </button>
   <!-- Reset Button -->
-  <button type="button" onclick="window.location.href='?{{ request.GET.urlencode|default_if_none:''|cut:'&search_query='|cut:request.GET.search_query }}'" class="absolute right-2 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm btn-secondary hover:bg-secondary-focus transition-colors duration-200">
-    <i class="fas fa-times text-white"></i>
-  </button>
+  <!-- Reset Button -->
+    <button type="button" onclick="window.location.href='?{% if request.GET.search_query %}{{ request.GET.urlencode|cut:'&search_query='|cut:request.GET.search_query }}{% else %}{{ request.GET.urlencode }}{% endif %}'" class="absolute right-2 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm btn-secondary hover:bg-secondary-focus transition-colors duration-200">
+      <i class="fas fa-times text-white"></i>
+      </button>
 </form>
       </div>
     </div>
